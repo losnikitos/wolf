@@ -66,3 +66,5 @@ group :test do
 end
 
 gem "notion-ruby-client", "~> 1.2"
+
+gem "tailwindcss-rails", "~> 4.4"
