@@ -5,6 +5,17 @@ class NotionBlockMediaCollector
     new(client: client).call(page_id)
   end
 
+  def self.collect_from_blocks(blocks)
+    items = []
+    Array(blocks).each { |block| collect_block(block, items) }
+    items.uniq { |item| item[:notion_block_id] }
+  end
+
+  def self.collect_block(block, items)
+    extract_media(block, items)
+    Array(block["children"]).each { |child| collect_block(child, items) }
+  end
+
   def initialize(client: nil)
     @client = client || Notion::Client.new
   end
@@ -20,47 +31,57 @@ class NotionBlockMediaCollector
   def collect_blocks(block_id, items)
     @client.block_children(block_id: block_id, page_size: 100) do |response|
       response.results.each do |block|
-        extract_media(block, items)
+        self.class.extract_media(block, items)
         collect_blocks(block_id_for(block), items) if block_attr(block, "has_children")
       end
     end
   end
 
-  def extract_media(block, items)
-    block_type = block_attr(block, "type")
-    return unless MEDIA_BLOCK_TYPES.include?(block_type)
+  class << self
+    def extract_media(block, items)
+      block_type = block["type"] || block_attr(block, "type")
+      return unless MEDIA_BLOCK_TYPES.include?(block_type)
 
-    payload = block_attr(block, block_type)
-    return unless payload
+      payload = block[block_type] || block_attr(block, block_type)
+      return unless payload
 
-    url = file_url(payload)
-    return if url.blank?
+      url = file_url(payload)
+      return if url.blank?
 
-    items << {
-      notion_block_id: block_id_for(block),
-      url: url,
-      block_type: block_type
-    }
-  end
+      items << {
+        notion_block_id: block["id"] || block_attr(block, "id"),
+        url: url,
+        block_type: block_type
+      }
+    end
 
-  def file_url(payload)
-    source_type = payload["type"] || payload[:type]
-    return unless source_type == "file"
+    def file_url(payload)
+      source_type = payload["type"] || payload[:type]
+      return unless source_type == "file"
 
-    inner = payload[source_type] || payload[source_type.to_sym]
-    inner && (inner["url"] || inner[:url])
+      inner = payload[source_type] || payload[source_type.to_sym]
+      inner && (inner["url"] || inner[:url])
+    end
+
+    def block_attr(block, key)
+      block_attr_for(block, key)
+    end
+
+    def block_attr_for(block, key)
+      if block.respond_to?(:[])
+        value = block[key]
+        return value unless value.nil?
+      end
+
+      block.public_send(key) if block.respond_to?(key)
+    end
   end
 
   def block_id_for(block)
-    block_attr(block, "id")
+    self.class.send(:block_attr, block, "id")
   end
 
   def block_attr(block, key)
-    if block.respond_to?(:[])
-      value = block[key]
-      return value unless value.nil?
-    end
-
-    block.public_send(key) if block.respond_to?(key)
+    self.class.block_attr_for(block, key)
   end
 end

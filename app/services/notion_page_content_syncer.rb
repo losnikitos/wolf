@@ -9,7 +9,6 @@ class NotionPageContentSyncer
     client: nil,
     blocks_fetcher: NotionBlocksFetcher,
     body_parser: NotionBodyParser,
-    block_media_collector: NotionBlockMediaCollector,
     media_attacher: NotionMediaAttacher
   )
     @record = record
@@ -17,7 +16,6 @@ class NotionPageContentSyncer
     @client = client || Notion::Client.new
     @blocks_fetcher = blocks_fetcher
     @body_parser = body_parser
-    @block_media_collector = block_media_collector
     @media_attacher = media_attacher
   end
 
@@ -37,9 +35,9 @@ class NotionPageContentSyncer
   end
 
   def sync_body_and_media!
-    items = @block_media_collector.call(@page_id, client: @client)
-    @media_attacher.attach_media!(@record, items)
     blocks = @blocks_fetcher.call(@page_id, client: @client)
+    items = NotionBlockMediaCollector.collect_from_blocks(blocks)
+    @media_attacher.attach_media!(@record, items)
     @record.update!(
       body: @body_parser.call(blocks),
       page_content_last_synced_at: Time.current
