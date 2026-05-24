@@ -16,6 +16,8 @@ en:
   footer:
     copyright: "© 2023 — Eugene Wolf"
     social: Social media
+    sign_in: Sign in
+    sign_out: Sign out
     telegram: Telegram
     telegram_channel: Telegram channel
   shared:
@@ -86,7 +88,9 @@ en:
     signed_in: Signed in successfully
     invalid_credentials: That email or password is incorrect
     session_logged_out: That session has been logged out
+    signed_out: Signed out successfully
     signed_up: Welcome! You have signed up successfully
+    registration_disabled: New account registration is currently disabled
     password_changed: Your password has been changed
     email_changed: Your email has been changed
     email_verified: Thank you for verifying your email address

@@ -40,4 +40,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     delete session_url(@user.sessions.last)
     assert_redirected_to sessions_url
   end
+
+  test "should sign out from footer route" do
+    sign_in_as @user
+
+    delete sign_out_url
+    assert_redirected_to root_url
+    assert_equal I18n.t("flash.signed_out"), flash[:notice]
+  end
 end

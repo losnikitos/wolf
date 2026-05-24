@@ -16,6 +16,8 @@ ru:
   footer:
     copyright: "© 2023 — Евгений Волк"
     social: Социальные сети
+    sign_in: Войти
+    sign_out: Выйти
     telegram: Telegram
     telegram_channel: Телеграм-канал
   shared:
@@ -90,7 +92,9 @@ ru:
     signed_in: Вы успешно вошли
     invalid_credentials: Неверный email или пароль
     session_logged_out: Сессия завершена
+    signed_out: Вы вышли из аккаунта
     signed_up: Регистрация прошла успешно
+    registration_disabled: Регистрация новых аккаунтов временно отключена
     password_changed: Пароль изменён
     email_changed: Email изменён
     email_verified: Спасибо за подтверждение email

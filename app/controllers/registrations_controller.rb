@@ -1,4 +1,8 @@
 class RegistrationsController < ApplicationController
+  REGISTRATION_ENABLED = false
+
+  before_action :redirect_unless_registration_enabled
+
   def new
     @user = User.new
   end
@@ -18,6 +22,12 @@ class RegistrationsController < ApplicationController
   end
 
   private
+    def redirect_unless_registration_enabled
+      return if self.class::REGISTRATION_ENABLED
+
+      redirect_to sign_in_path, alert: t("flash.registration_disabled")
+    end
+
     def user_params
       params.permit(:email, :password, :password_confirmation)
     end

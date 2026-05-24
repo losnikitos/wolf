@@ -7,13 +7,13 @@
     <div class="columns-1 gap-x-10 sm:columns-2 md:columns-4 lg:gap-x-14">
       <% @group_names.each do |group_name| %>
         <section class="mb-10 break-inside-avoid">
-          <h2 class="mb-3 text-2xl font-bold tracking-tight text-zinc-900"><%= group_name %></h2>
+          <h2 class="mb-3 text-2xl/6 font-bold tracking-tight text-zinc-900"><%= group_name %></h2>
           <ul class="flex flex-col gap-2">
             <% @clients_by_group[group_name].each do |client| %>
               <% project_count = @project_counts[client.id].to_i %>
               <li>
                 <%= link_to client_path(client),
-                      class: "flex min-w-0 items-baseline gap-2 text-sm font-medium transition text-zinc-700 hover:text-zinc-900" do %>
+                      class: "flex min-w-0 items-baseline gap-2 font-medium transition text-zinc-700 hover:text-zinc-900" do %>
                   <span class="min-w-0 truncate"><%= client.name %></span>
                   <% if project_count.positive? %>
                     <span class="shrink-0 tabular-nums font-normal text-zinc-400"><%= project_count %></span>

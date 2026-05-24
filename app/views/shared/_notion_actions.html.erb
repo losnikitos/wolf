@@ -1,5 +1,5 @@
 <%# locals: record (Notion-synced model with notion_page_id) %>
-<% if record.notion_page_id.present? %>
+<% if Current.session && record.notion_page_id.present? %>
   <div class="flex items-center gap-0.5">
     <% if record.notion_url.present? %>
       <%= link_to record.notion_url,

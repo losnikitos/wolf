@@ -23,6 +23,12 @@ class SessionsController < ApplicationController
     @session.destroy; redirect_to(sessions_path, notice: t("flash.session_logged_out"))
   end
 
+  def sign_out
+    Current.session&.destroy
+
+    redirect_to root_path, notice: t("flash.signed_out")
+  end
+
   private
     def set_session
       @session = Current.user.sessions.find(params[:id])

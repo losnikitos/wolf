@@ -33,4 +33,8 @@ module ApplicationHelper
   def localized_year_label(year)
     year == "Unknown" ? t("shared.unknown") : year
   end
+
+  def registration_enabled?
+    RegistrationsController::REGISTRATION_ENABLED
+  end
 end

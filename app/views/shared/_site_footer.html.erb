@@ -1,6 +1,25 @@
 <footer class="border-t border-zinc-200/80 bg-white">
   <div class="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-    <p class="text-sm text-zinc-500"><%= t("footer.copyright") %></p>
+    <p class="flex items-center gap-2 text-sm text-zinc-500">
+      <%= t("footer.copyright") %>
+      <% if Current.session %>
+        <%= button_to sign_out_path,
+              method: :delete,
+              form: { class: "inline-flex" },
+              class: "inline-flex text-zinc-500 transition hover:text-zinc-900",
+              title: t("footer.sign_out"),
+              aria: { label: t("footer.sign_out") } do %>
+          <%= heroicon "lock-closed", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
+        <% end %>
+      <% else %>
+        <%= link_to sign_in_path,
+              class: "inline-flex text-zinc-500 transition hover:text-zinc-900",
+              title: t("footer.sign_in"),
+              aria: { label: t("footer.sign_in") } do %>
+          <%= heroicon "lock-closed", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
+        <% end %>
+      <% end %>
+    </p>
 
     <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm sm:justify-end" aria-label="<%= t("footer.social") %>">
       <%= link_to t("footer.telegram"),
