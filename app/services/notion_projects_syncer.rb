@@ -24,12 +24,16 @@ class NotionProjectsSyncer
     database_id: Project::NOTION_DATABASE_ID,
     media_attacher: NotionMediaAttacher,
     block_media_collector: NotionBlockMediaCollector,
+    blocks_fetcher: NotionBlocksFetcher,
+    body_parser: NotionBodyParser,
     progress_logger: nil
   )
     @client = client || Notion::Client.new
     @database_id = database_id
     @media_attacher = media_attacher
     @block_media_collector = block_media_collector
+    @blocks_fetcher = blocks_fetcher
+    @body_parser = body_parser
     @progress_logger = progress_logger.nil? ? ->(message) { $stdout.puts(message) } : progress_logger
   end
 
@@ -73,6 +77,7 @@ class NotionProjectsSyncer
   def needs_sync?(project, page)
     return true if project.new_record? || project.last_synced_at.nil?
     return true if project.media.none?
+    return true if project.body.nil?
 
     edited_at = parse_time(page.last_edited_time)
     edited_at.nil? || edited_at > project.last_synced_at
@@ -83,6 +88,12 @@ class NotionProjectsSyncer
 
     items = @block_media_collector.call(page.id, client: @client)
     @media_attacher.attach_media!(project, items)
+    sync_body!(project, page)
+  end
+
+  def sync_body!(project, page)
+    blocks = @blocks_fetcher.call(page.id, client: @client)
+    project.update!(body: @body_parser.call(blocks))
   end
 
   def attributes_for(page)

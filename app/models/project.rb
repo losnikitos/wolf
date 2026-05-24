@@ -23,11 +23,19 @@ class Project < ApplicationRecord
 
   validates :notion_page_id, presence: true, uniqueness: true
 
+  def media_for_block(notion_block_id)
+    media.find { |attachment| attachment.blob.metadata["notion_block_id"] == notion_block_id }
+  end
+
   scope :favorites, -> { where(favorite: true) }
   scope :active, -> { where(archived: false) }
 
   def slug_candidates
     [ :name, :notion_page_id ]
+  end
+
+  def normalize_friendly_id(value)
+    value.to_s.to_slug.transliterate(:russian).normalize.to_s
   end
 
   def should_generate_new_friendly_id?

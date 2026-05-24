@@ -185,6 +185,32 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     assert_equal false, project.favorite
   end
 
+  test "syncs page body from notion blocks" do
+    blocks = [
+      {
+        "id" => "p-1",
+        "type" => "paragraph",
+        "paragraph" => { "rich_text" => [ { "plain_text" => "Project story", "annotations" => {} } ] },
+        "children" => []
+      }
+    ]
+    client = FakeNotionClient.new([ notion_page ], blocks: blocks)
+
+    with_stubbed_media_sync do |media_attacher, block_collector|
+      NotionProjectsSyncer.new(
+        client: client,
+        media_attacher: media_attacher,
+        block_media_collector: block_collector,
+        progress_logger: ->(_) {}
+      ).call
+    end
+
+    project = Project.find_by!(notion_page_id: "page-1")
+    assert_equal 1, project.body.size
+    assert_equal "paragraph", project.body.first["type"]
+    assert_equal "Project story", project.body.first["rich_text"].first["text"]
+  end
+
   private
 
   def with_stubbed_media_sync
@@ -227,8 +253,9 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
   end
 
   class FakeNotionClient
-    def initialize(pages)
+    def initialize(pages, blocks: [])
       @pages = pages
+      @blocks = blocks
     end
 
     def database_query(**_options)
@@ -236,7 +263,7 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     end
 
     def block_children(**_options)
-      yield OpenStruct.new(results: [])
+      yield OpenStruct.new(results: @blocks)
     end
   end
 

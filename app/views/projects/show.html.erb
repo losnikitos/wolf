@@ -1,6 +1,6 @@
 <% content_for :title, @project.name.presence || "Project" %>
 
-<div class="flex min-w-0 flex-1 flex-col gap-8 pb-16 w-full max-w-3xl mx-auto">
+<div class="flex min-w-0 flex-1 flex-col gap-8 pb-16 w-full max-w-4xl mx-auto">
   <nav class="text-sm">
     <%= link_to "Projects", projects_path, class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
     <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
@@ -79,6 +79,8 @@
           <% end %>
         </dl>
       <% end %>
+
+      <%= render "projects/body" %>
 
       <% if @project.notion_created_at.present? || @project.notion_last_edited_at.present? || @project.last_synced_at.present? %>
         <footer class="mt-8 border-t border-zinc-100 pt-6 text-xs text-zinc-400">
