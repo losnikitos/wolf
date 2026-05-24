@@ -15,7 +15,12 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.friendly.find(params[:slug])
+    if params[:client_slug].present?
+      @client = Client.friendly.find(params[:client_slug])
+      @project = @client.projects.friendly.find(params[:project_slug])
+    else
+      @project = Project.friendly.find(params[:slug])
+    end
   end
 
   private

@@ -1,4 +1,12 @@
 module ProjectsHelper
+  def project_path_for(project, client: nil)
+    if client
+      client_project_path(client_slug: client.slug, project_slug: project.slug)
+    else
+      project_path(project)
+    end
+  end
+
   TAG_LABELS = {
     "roles" => "Roles",
     "deliverables" => "Deliverables",

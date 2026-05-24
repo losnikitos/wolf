@@ -1,10 +1,18 @@
 <% content_for :title, @project.name.presence || "Project" %>
 
 <div class="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
-  <nav class="text-sm">
-    <%= link_to "Projects", projects_path, class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
-    <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
-    <span class="text-zinc-900"><%= @project.name.presence || "Untitled" %></span>
+  <nav class="text-sm" aria-label="Breadcrumb">
+    <% if @client %>
+      <%= link_to "Clients", clients_path, class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
+      <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
+      <%= link_to @client.name, client_path(@client), class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
+      <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
+      <span class="text-zinc-900" aria-current="page"><%= @project.name.presence || "Untitled" %></span>
+    <% else %>
+      <%= link_to "Projects", projects_path, class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
+      <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
+      <span class="text-zinc-900" aria-current="page"><%= @project.name.presence || "Untitled" %></span>
+    <% end %>
   </nav>
 
   <article class="overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5">

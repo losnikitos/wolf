@@ -25,8 +25,9 @@ Rails.application.routes.draw do
 
   resources :clients, only: %i[index]
   get "clients/:slug", to: "clients#show", as: :client
+  get "clients/:client_slug/:project_slug", to: "projects#show", as: :client_project
 
-  resources :projects, only: %i[index] do
+  resources :projects, only: %i[index show], param: :slug do
     collection do
       get ":kind/:tag",
           to: "projects#collection",
@@ -34,5 +35,4 @@ Rails.application.routes.draw do
           constraints: { kind: /roles|deliverables|directions/ }
     end
   end
-  get "project/:slug", to: "projects#show", as: :project
 end
