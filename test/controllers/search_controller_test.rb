@@ -31,7 +31,9 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index renders search page in english" do
-    get search_url, params: { lang: "en" }
+    patch locale_url, params: { locale: "en" }, headers: { "HTTP_REFERER" => search_url }
+    follow_redirect!
+
     assert_response :success
     assert_select "h1", "Search"
   end

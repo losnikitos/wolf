@@ -8,11 +8,32 @@ class ApplicationController < ActionController::Base
 
   private
     def set_locale
-      I18n.locale = params[:lang] == "en" ? :en : I18n.default_locale
+      I18n.locale = resolve_locale
     end
 
-    def default_url_options
-      I18n.locale == :en ? super.merge(lang: "en") : super
+    def resolve_locale
+      session_locale || browser_preferred_locale || I18n.default_locale
+    end
+
+    def session_locale
+      locale = session[:locale]&.to_sym
+      locale if I18n.available_locales.include?(locale)
+    end
+
+    def browser_preferred_locale
+      header = request.env["HTTP_ACCEPT_LANGUAGE"]
+      return unless header.present?
+
+      header.split(",").filter_map do |part|
+        lang_tag, quality = part.strip.split(";")
+        quality = quality&.match(/q=([\d.]+)/)&.[](1)&.to_f || 1.0
+        [ lang_tag.downcase, quality ]
+      end.sort_by { |_, quality| -quality }.each do |lang_tag, _|
+        return :en if lang_tag.start_with?("en")
+        return :ru if lang_tag.start_with?("ru")
+      end
+
+      nil
     end
 
     def authenticate

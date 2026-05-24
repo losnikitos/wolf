@@ -8,17 +8,18 @@ class LocaleTest < ActionDispatch::IntegrationTest
     assert_match(/Клиенты/, response.body)
   end
 
-  test "uses english when lang=en is in the url" do
-    get root_url, params: { lang: "en" }
+  test "uses english when locale is stored in session" do
+    patch locale_url, params: { locale: "en" }, headers: { "HTTP_REFERER" => root_url }
+    follow_redirect!
 
-    assert_response :success
     assert_match(/Clients/, response.body)
   end
 
-  test "preserves lang=en in generated links" do
-    get root_url, params: { lang: "en" }
+  test "generated links do not include lang query param" do
+    patch locale_url, params: { locale: "en" }, headers: { "HTTP_REFERER" => root_url }
+    follow_redirect!
 
     assert_response :success
-    assert_match(/lang=en/, response.body)
+    assert_no_match(/\?lang=/, response.body)
   end
 end
