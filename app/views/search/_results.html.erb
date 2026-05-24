@@ -1,23 +1,23 @@
 <% if @query.present? %>
   <% total = @projects.size + @clients.size + @media_appearances.size + @talks.size + @reviews.size %>
-  <p class="text-sm tabular-nums text-zinc-500"><%= pluralize(total, "result") %> for “<%= h(@query) %>”</p>
+  <p class="text-sm tabular-nums text-zinc-500"><%= t("search.results_count", count: total, query: h(@query)) %></p>
 
   <% if total.zero? %>
     <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center">
-      <p class="text-zinc-600">No matches for “<%= h(@query) %>”.</p>
-      <p class="mt-2 text-sm text-zinc-500">Try a different name.</p>
+      <p class="text-zinc-600"><%= t("search.no_matches", query: h(@query)) %></p>
+      <p class="mt-2 text-sm text-zinc-500"><%= t("search.try_different") %></p>
     </div>
   <% else %>
     <% if @projects.any? %>
       <section class="flex flex-col gap-3">
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400">Projects</h2>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400"><%= t("projects.title") %></h2>
         <ul class="flex flex-col gap-2">
           <% @projects.each do |project| %>
             <li>
               <%= link_to project_path_for(project),
                     data: { turbo_frame: "_top" },
                     class: "group flex items-baseline justify-between gap-4 rounded-xl border border-zinc-200/80 bg-white px-5 py-3 shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
-                <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= project.name.presence || "Untitled project" %></span>
+                <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= project.name.presence || t("projects.untitled") %></span>
                 <% if project.year.present? %>
                   <span class="shrink-0 text-xs tabular-nums text-zinc-400"><%= project.year %></span>
                 <% end %>
@@ -30,14 +30,14 @@
 
     <% if @media_appearances.any? %>
       <section class="flex flex-col gap-3">
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400">Media</h2>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400"><%= t("media.title") %></h2>
         <ul class="flex flex-col gap-2">
           <% @media_appearances.each do |appearance| %>
             <li>
               <%= link_to media_appearance_path_for(appearance),
                     data: { turbo_frame: "_top" },
                     class: "group flex items-baseline justify-between gap-4 rounded-xl border border-zinc-200/80 bg-white px-5 py-3 shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
-                <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= appearance.name.presence || "Untitled appearance" %></span>
+                <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= appearance.name.presence || t("media.untitled") %></span>
                 <% if appearance.appearance_year.present? %>
                   <span class="shrink-0 text-xs tabular-nums text-zinc-400"><%= appearance.appearance_year %></span>
                 <% end %>
@@ -50,7 +50,7 @@
 
     <% if @clients.any? %>
       <section class="flex flex-col gap-3">
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400">Clients</h2>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400"><%= t("clients.title") %></h2>
         <ul class="flex flex-col gap-2">
           <% @clients.each do |client| %>
             <li>
@@ -67,14 +67,14 @@
 
     <% if @reviews.any? %>
       <section class="flex flex-col gap-3">
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400">Reviews</h2>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400"><%= t("reviews.title") %></h2>
         <ul class="flex flex-col gap-2">
           <% @reviews.each do |review| %>
             <li>
               <%= link_to review_path(review),
                     data: { turbo_frame: "_top" },
                     class: "group block rounded-xl border border-zinc-200/80 bg-white px-5 py-3 shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
-                <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= review.name.presence || "Untitled review" %></span>
+                <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= review.name.presence || t("reviews.untitled") %></span>
               <% end %>
             </li>
           <% end %>
@@ -84,7 +84,7 @@
 
     <% if @talks.any? %>
       <section class="flex flex-col gap-3">
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400">Talks</h2>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400"><%= t("talks.title") %></h2>
         <ul class="flex flex-col gap-2">
           <% @talks.each do |talk| %>
             <li>
@@ -94,14 +94,14 @@
                       data: { turbo_frame: "_top" },
                       **talk_link_options(talk),
                       class: "group flex items-baseline justify-between gap-4 rounded-xl border border-zinc-200/80 bg-white px-5 py-3 shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
-                  <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= talk.name.presence || "Untitled talk" %></span>
+                  <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= talk.name.presence || t("talks.untitled") %></span>
                   <% if talk.talk_year.present? %>
                     <span class="shrink-0 text-xs tabular-nums text-zinc-400"><%= talk.talk_year %></span>
                   <% end %>
                 <% end %>
               <% else %>
                 <div class="flex items-baseline justify-between gap-4 rounded-xl border border-zinc-200/80 bg-zinc-50 px-5 py-3">
-                  <span class="font-medium text-zinc-700"><%= talk.name.presence || "Untitled talk" %></span>
+                  <span class="font-medium text-zinc-700"><%= talk.name.presence || t("talks.untitled") %></span>
                   <% if talk.talk_year.present? %>
                     <span class="shrink-0 text-xs tabular-nums text-zinc-400"><%= talk.talk_year %></span>
                   <% end %>
