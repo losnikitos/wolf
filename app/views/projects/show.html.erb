@@ -1,6 +1,6 @@
 <% content_for :title, @project.name.presence || "Project" %>
 
-<div class="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
+<div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
   <nav class="text-sm" aria-label="Breadcrumb">
     <% if @client %>
       <%= link_to "Clients", clients_path, class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
