@@ -21,19 +21,13 @@ class NotionProjectsSyncer
   def initialize(
     client: nil,
     database_id: Project::NOTION_DATABASE_ID,
-    media_attacher: NotionMediaAttacher,
-    block_media_collector: NotionBlockMediaCollector,
-    blocks_fetcher: NotionBlocksFetcher,
-    body_parser: NotionBodyParser,
+    page_content_syncer: NotionPageContentSyncer,
     progress_logger: nil,
     force: false
   )
     @client = client || Notion::Client.new
     @database_id = database_id
-    @media_attacher = media_attacher
-    @block_media_collector = block_media_collector
-    @blocks_fetcher = blocks_fetcher
-    @body_parser = body_parser
+    @page_content_syncer = page_content_syncer
     @progress_logger = progress_logger.nil? ? ->(message) { $stdout.puts(message) } : progress_logger
     @force = force
   end
@@ -70,7 +64,7 @@ class NotionProjectsSyncer
 
     project.last_synced_at = Time.current
     project.save!
-    sync_media!(project, page)
+    sync_page_content!(project, page)
 
     return :created if was_new_record
     return :updated if content_changed
@@ -80,6 +74,7 @@ class NotionProjectsSyncer
 
   def needs_sync?(project, page)
     return true if project.new_record?
+    return true if project.page_content_never_synced?
 
     edited_at = parse_time(page.last_edited_time)
     return true if edited_at.nil? || project.notion_last_edited_at.nil?
@@ -87,17 +82,8 @@ class NotionProjectsSyncer
     edited_at > project.notion_last_edited_at
   end
 
-  def sync_media!(project, page)
-    @media_attacher.attach_cover!(project)
-
-    items = @block_media_collector.call(page.id, client: @client)
-    @media_attacher.attach_media!(project, items)
-    sync_body!(project, page)
-  end
-
-  def sync_body!(project, page)
-    blocks = @blocks_fetcher.call(page.id, client: @client)
-    project.update!(body: @body_parser.call(blocks))
+  def sync_page_content!(project, page)
+    @page_content_syncer.call(project, page.id, client: @client)
   end
 
   def attributes_for(page)

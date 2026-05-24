@@ -86,4 +86,24 @@ class NotionBodyParserTest < ActiveSupport::TestCase
     assert_equal 2, column_list["column_count"]
     assert_equal "Left", column_list["columns"].first["children"].first["rich_text"].first["text"]
   end
+
+  test "parses external video embed url" do
+    blocks = [
+      {
+        "id" => "video-1",
+        "type" => "video",
+        "video" => {
+          "type" => "external",
+          "external" => { "url" => "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+        },
+        "children" => []
+      }
+    ]
+
+    body = NotionBodyParser.call(blocks)
+
+    assert_equal 1, body.size
+    assert_equal "video", body.first["type"]
+    assert_equal "https://www.youtube.com/watch?v=dQw4w9WgXcQ", body.first["embed_url"]
+  end
 end

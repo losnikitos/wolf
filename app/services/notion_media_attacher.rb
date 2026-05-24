@@ -1,31 +1,31 @@
 class NotionMediaAttacher
-  def self.attach_cover!(project, downloader: nil)
-    new(project, downloader: downloader).attach_cover!
+  def self.attach_cover!(record, downloader: nil)
+    new(record, downloader: downloader).attach_cover!
   end
 
-  def self.attach_media!(project, items, downloader: nil)
-    new(project, downloader: downloader).attach_media!(items)
+  def self.attach_media!(record, items, downloader: nil)
+    new(record, downloader: downloader).attach_media!(items)
   end
 
-  def initialize(project, downloader: nil)
-    @project = project
+  def initialize(record, downloader: nil)
+    @record = record
     @downloader = downloader
   end
 
   def attach_cover!
-    url = @project.cover_url
+    url = @record.cover_url
 
     if url.blank?
-      @project.cover.purge if @project.cover.attached?
+      @record.cover.purge if @record.cover.attached?
       return
     end
 
-    if @project.cover.attached? && notion_url_unchanged?(@project.cover.blob.metadata["notion_url"], url)
+    if @record.cover.attached? && notion_url_unchanged?(@record.cover.blob.metadata["notion_url"], url)
       return
     end
 
     attach_file(
-      attachment: @project.cover,
+      attachment: @record.cover,
       url: url,
       filename_fallback: "cover",
       metadata: { notion_url: url },
@@ -36,13 +36,13 @@ class NotionMediaAttacher
   def attach_media!(items)
     desired_block_ids = items.map { |item| item[:notion_block_id] }
 
-    @project.media.each do |attachment|
+    @record.media.each do |attachment|
       block_id = attachment.blob.metadata["notion_block_id"]
       attachment.purge unless desired_block_ids.include?(block_id)
     end
 
     items.each do |item|
-      existing = @project.media.find do |attachment|
+      existing = @record.media.find do |attachment|
         attachment.blob.metadata["notion_block_id"] == item[:notion_block_id]
       end
 
@@ -52,11 +52,11 @@ class NotionMediaAttacher
 
       if existing
         existing.purge
-        @project.media.reload
+        @record.media.reload
       end
 
       attach_file(
-        attachment: @project.media,
+        attachment: @record.media,
         url: item[:url],
         filename_fallback: item[:block_type] || "media",
         metadata: {
@@ -69,7 +69,7 @@ class NotionMediaAttacher
 
   private
 
-  def attach_file(attachment:, url:, filename_fallback:, metadata:, allowed_content_types: Project::MEDIA_CONTENT_TYPES)
+  def attach_file(attachment:, url:, filename_fallback:, metadata:, allowed_content_types: NotionPageContent::MEDIA_CONTENT_TYPES)
     io, filename, content_type = parse_fetch_result(fetch(url, filename_fallback: filename_fallback))
     return unless io
 

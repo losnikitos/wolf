@@ -8,7 +8,8 @@ namespace :notion do
 
   desc "Sync the Notion media appearances database into MediaAppearance records"
   task sync_media: :environment do
-    result = NotionMediaAppearancesSyncer.new.call
+    force = ENV["FORCE"] == "1"
+    result = NotionMediaAppearancesSyncer.new(force: force).call
 
     puts "Synced #{result.total} media appearances (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped)."
   end
@@ -31,5 +32,15 @@ namespace :notion do
     result = NotionProjectsSyncer.new(force: true).call(notion_page_id: notion_page_id)
 
     puts "Synced 1 project (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged)."
+  end
+
+  desc "Force-sync one Notion media appearance by page ID (ignores last-edited cache)"
+  task :sync_media_page, [ :notion_page_id ] => :environment do |_task, args|
+    notion_page_id = args[:notion_page_id].presence || ENV["NOTION_PAGE_ID"]
+    abort "Usage: bin/rails 'notion:sync_media_page[NOTION_PAGE_ID]' (or NOTION_PAGE_ID=... bin/rails notion:sync_media_page)" unless notion_page_id
+
+    result = NotionMediaAppearancesSyncer.new(force: true).call(notion_page_id: notion_page_id)
+
+    puts "Synced 1 media appearance (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped)."
   end
 end

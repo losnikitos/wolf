@@ -16,11 +16,13 @@ class NotionMediaAppearancesSyncer
   def initialize(
     client: nil,
     database_id: MediaAppearance::NOTION_DATABASE_ID,
+    page_content_syncer: NotionPageContentSyncer,
     progress_logger: nil,
     force: false
   )
     @client = client || Notion::Client.new
     @database_id = database_id
+    @page_content_syncer = page_content_syncer
     @progress_logger = progress_logger.nil? ? ->(message) { $stdout.puts(message) } : progress_logger
     @force = force
   end
@@ -57,6 +59,7 @@ class NotionMediaAppearancesSyncer
 
     media_appearance.last_synced_at = Time.current
     media_appearance.save!
+    sync_page_content!(media_appearance, page)
 
     return :created if was_new_record
     return :updated if content_changed
@@ -64,8 +67,13 @@ class NotionMediaAppearancesSyncer
     :unchanged
   end
 
+  def sync_page_content!(media_appearance, page)
+    @page_content_syncer.call(media_appearance, page.id, client: @client)
+  end
+
   def needs_sync?(media_appearance, page)
     return true if media_appearance.new_record?
+    return true if media_appearance.page_content_never_synced?
 
     edited_at = parse_time(page.last_edited_time)
     return true if edited_at.nil? || media_appearance.notion_last_edited_at.nil?

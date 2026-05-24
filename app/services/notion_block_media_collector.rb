@@ -45,7 +45,7 @@ class NotionBlockMediaCollector
 
   def file_url(payload)
     source_type = payload["type"] || payload[:type]
-    return unless source_type
+    return unless source_type == "file"
 
     inner = payload[source_type] || payload[source_type.to_sym]
     inner && (inner["url"] || inner[:url])

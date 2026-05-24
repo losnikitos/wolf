@@ -46,12 +46,14 @@ class NotionBodyParser
 
   def parse_media_block(block)
     payload = block[block["type"]] || {}
+    embed_url = external_url(payload)
 
     {
       "type" => block["type"],
       "id" => block["id"],
-      "caption" => normalize_rich_text(payload["caption"])
-    }
+      "caption" => normalize_rich_text(payload["caption"]),
+      "embed_url" => embed_url
+    }.compact
   end
 
   def parse_column_list(block)
@@ -73,6 +75,14 @@ class NotionBodyParser
       "column_count" => columns.size,
       "columns" => columns
     }
+  end
+
+  def external_url(payload)
+    source_type = payload["type"]
+    return unless source_type == "external"
+
+    inner = payload["external"]
+    inner && inner["url"]
   end
 
   def normalize_rich_text(rich_text)

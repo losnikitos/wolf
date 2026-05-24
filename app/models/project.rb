@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  include NotionPageContent
+
   extend FriendlyId
 
   friendly_id :name, use: :slugged
@@ -8,27 +10,11 @@ class Project < ApplicationRecord
 
   NOTION_DATABASE_ID = "16e875f5-4593-80dc-8566-f871610e6bdf".freeze
 
-  MEDIA_CONTENT_TYPES = %w[
-    image/jpeg
-    image/png
-    image/gif
-    image/webp
-    image/svg+xml
-    video/mp4
-    video/webm
-    video/quicktime
-  ].freeze
-
-  COVER_CONTENT_TYPES = MEDIA_CONTENT_TYPES
+  COVER_CONTENT_TYPES = NotionPageContent::MEDIA_CONTENT_TYPES
 
   has_one_attached :cover
-  has_many_attached :media
 
   validates :notion_page_id, presence: true, uniqueness: true
-
-  def media_for_block(notion_block_id)
-    media.find { |attachment| attachment.blob.metadata["notion_block_id"] == notion_block_id }
-  end
 
   def cover_for_display
     return cover if cover.attached?

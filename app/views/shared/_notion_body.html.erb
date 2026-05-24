@@ -1,0 +1,7 @@
+<% if record.body.present? %>
+  <section class="notion-body mt-10 border-t border-zinc-100 pt-10">
+    <div class="prose-notion max-w-none space-y-1 text-[15px] leading-relaxed">
+      <%= render_notion_blocks(record.body, record: record) %>
+    </div>
+  </section>
+<% end %>

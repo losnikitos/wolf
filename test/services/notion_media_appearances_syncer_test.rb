@@ -11,7 +11,13 @@ class NotionMediaAppearancesSyncerTest < ActiveSupport::TestCase
   test "creates media appearances from a Notion database" do
     client = FakeNotionClient.new([ notion_page ])
 
-    result = NotionMediaAppearancesSyncer.new(client: client, progress_logger: ->(_) {}).call
+    result = with_page_content_sync do |page_content_syncer|
+      NotionMediaAppearancesSyncer.new(
+        client: client,
+        page_content_syncer: page_content_syncer,
+        progress_logger: ->(_) {}
+      ).call
+    end
 
     assert_equal 1, result.created
     assert_equal 0, result.updated
@@ -35,7 +41,13 @@ class NotionMediaAppearancesSyncerTest < ActiveSupport::TestCase
     )
     client = FakeNotionClient.new([ notion_page(project_relation_id: "project-page-1") ])
 
-    NotionMediaAppearancesSyncer.new(client: client, progress_logger: ->(_) {}).call
+    with_page_content_sync do |page_content_syncer|
+      NotionMediaAppearancesSyncer.new(
+        client: client,
+        page_content_syncer: page_content_syncer,
+        progress_logger: ->(_) {}
+      ).call
+    end
 
     record = MediaAppearance.find_by!(notion_page_id: "media-page-1")
     assert_equal project, record.project
@@ -44,17 +56,75 @@ class NotionMediaAppearancesSyncerTest < ActiveSupport::TestCase
   test "re-syncing unchanged media appearances skips" do
     client = FakeNotionClient.new([ notion_page ])
 
-    NotionMediaAppearancesSyncer.new(client: client, progress_logger: ->(_) {}).call
+    with_page_content_sync do |page_content_syncer|
+      NotionMediaAppearancesSyncer.new(
+        client: client,
+        page_content_syncer: page_content_syncer,
+        progress_logger: ->(_) {}
+      ).call
+    end
     first_sync = MediaAppearance.last.last_synced_at
 
     travel 1.minute do
-      result = NotionMediaAppearancesSyncer.new(client: client, progress_logger: ->(_) {}).call
+      result = with_page_content_sync do |page_content_syncer|
+        NotionMediaAppearancesSyncer.new(
+          client: client,
+          page_content_syncer: page_content_syncer,
+          progress_logger: ->(_) {}
+        ).call
+      end
       assert_equal 1, result.skipped
       assert_equal first_sync, MediaAppearance.last.last_synced_at
     end
   end
 
+  test "syncs page body from notion blocks" do
+    blocks = [
+      {
+        "id" => "img-1",
+        "type" => "image",
+        "image" => { "type" => "file", "file" => { "url" => "https://files.notion/photo.png" }, "caption" => [] },
+        "children" => []
+      },
+      {
+        "id" => "video-1",
+        "type" => "video",
+        "video" => {
+          "type" => "external",
+          "external" => { "url" => "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+        },
+        "children" => []
+      }
+    ]
+    client = FakeNotionClient.new([ notion_page ], blocks: blocks)
+
+    with_page_content_sync(NotionPageContentSyncer) do |page_content_syncer|
+      NotionMediaAppearancesSyncer.new(
+        client: client,
+        page_content_syncer: page_content_syncer,
+        progress_logger: ->(_) {}
+      ).call
+    end
+
+    record = MediaAppearance.find_by!(notion_page_id: "media-page-1")
+    assert_equal 2, record.body.size
+    assert_equal "image", record.body.first["type"]
+    assert_equal "https://www.youtube.com/watch?v=dQw4w9WgXcQ", record.body.last["embed_url"]
+  end
+
   private
+
+  def with_page_content_sync(syncer = null_page_content_syncer)
+    yield syncer
+  end
+
+  def null_page_content_syncer
+    syncer = Object.new
+    syncer.define_singleton_method(:call) do |record, *, **|
+      record.update!(page_content_last_synced_at: Time.current)
+    end
+    syncer
+  end
 
   def notion_page(last_edited_time: "2018-06-02T12:00:00.000Z", project_relation_id: nil)
     relation = project_relation_id ? [ { "id" => project_relation_id } ] : []
@@ -77,8 +147,9 @@ class NotionMediaAppearancesSyncerTest < ActiveSupport::TestCase
   end
 
   class FakeNotionClient
-    def initialize(pages)
+    def initialize(pages, blocks: [])
       @pages = pages
+      @blocks = blocks
     end
 
     def database_query(**_options)
@@ -87,6 +158,10 @@ class NotionMediaAppearancesSyncerTest < ActiveSupport::TestCase
 
     def page(page_id:)
       @pages.find { |page| page.id == page_id } || raise("Unknown page #{page_id}")
+    end
+
+    def block_children(**_options)
+      yield OpenStruct.new(results: @blocks)
     end
   end
 end

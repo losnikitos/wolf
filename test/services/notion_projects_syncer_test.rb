@@ -14,11 +14,10 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
   test "creates projects from a Notion database" do
     client = FakeNotionClient.new([ notion_page ])
 
-    result = with_stubbed_media_sync do |media_attacher, block_collector|
+    result = with_page_content_sync do |page_content_syncer|
       NotionProjectsSyncer.new(
         client: client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {}
       ).call
     end
@@ -48,22 +47,20 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
   test "re-syncing unchanged projects skips and preserves last_synced_at" do
     client = FakeNotionClient.new([ notion_page ])
 
-    with_stubbed_media_sync do |media_attacher, block_collector|
+    with_page_content_sync do |page_content_syncer|
       NotionProjectsSyncer.new(
         client: client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {}
       ).call
     end
     first_sync = Project.last.last_synced_at
 
     travel 1.minute do
-      result = with_stubbed_media_sync do |media_attacher, block_collector|
+      result = with_page_content_sync do |page_content_syncer|
         NotionProjectsSyncer.new(
           client: client,
-          media_attacher: media_attacher,
-          block_media_collector: block_collector,
+          page_content_syncer: page_content_syncer,
           progress_logger: ->(_) {}
         ).call
       end
@@ -77,11 +74,10 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
 
   test "syncs when notion last_edited_at is newer than cached value" do
     client = FakeNotionClient.new([ notion_page ])
-    with_stubbed_media_sync do |media_attacher, block_collector|
+    with_page_content_sync do |page_content_syncer|
       NotionProjectsSyncer.new(
         client: client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {}
       ).call
     end
@@ -89,11 +85,10 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     updated_page = notion_page(last_edited_time: "2026-05-13T12:00:00.000Z")
     updated_client = FakeNotionClient.new([ updated_page ])
 
-    result = with_stubbed_media_sync do |media_attacher, block_collector|
+    result = with_page_content_sync do |page_content_syncer|
       NotionProjectsSyncer.new(
         client: updated_client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {}
       ).call
     end
@@ -121,11 +116,10 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     )
     client = FakeNotionClient.new([ notion_page(last_edited_time: edited_at.iso8601) ], blocks: blocks)
 
-    with_stubbed_media_sync do |media_attacher, block_collector|
+    with_page_content_sync(NotionPageContentSyncer) do |page_content_syncer|
       result = NotionProjectsSyncer.new(
         client: client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {},
         force: true
       ).call(notion_page_id: "page-1")
@@ -138,22 +132,20 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
 
   test "detects updates when Notion values change" do
     client = FakeNotionClient.new([ notion_page ])
-    with_stubbed_media_sync do |media_attacher, block_collector|
+    with_page_content_sync do |page_content_syncer|
       NotionProjectsSyncer.new(
         client: client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {}
       ).call
     end
 
     updated_client = FakeNotionClient.new([ notion_page(status: "В работе", last_edited_time: "2026-05-13T12:00:00.000Z") ])
 
-    result = with_stubbed_media_sync do |media_attacher, block_collector|
+    result = with_page_content_sync do |page_content_syncer|
       NotionProjectsSyncer.new(
         client: updated_client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {}
       ).call
     end
@@ -175,11 +167,10 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     )
     client = FakeNotionClient.new([ bare ])
 
-    with_stubbed_media_sync do |media_attacher, block_collector|
+    with_page_content_sync do |page_content_syncer|
       NotionProjectsSyncer.new(
         client: client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {}
       ).call
     end
@@ -203,11 +194,10 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     ]
     client = FakeNotionClient.new([ notion_page ], blocks: blocks)
 
-    with_stubbed_media_sync do |media_attacher, block_collector|
+    with_page_content_sync(NotionPageContentSyncer) do |page_content_syncer|
       NotionProjectsSyncer.new(
         client: client,
-        media_attacher: media_attacher,
-        block_media_collector: block_collector,
+        page_content_syncer: page_content_syncer,
         progress_logger: ->(_) {}
       ).call
     end
@@ -220,15 +210,16 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
 
   private
 
-  def with_stubbed_media_sync
-    null_attacher = Object.new
-    null_attacher.define_singleton_method(:attach_cover!) { |*| }
-    null_attacher.define_singleton_method(:attach_media!) { |*, **| }
+  def with_page_content_sync(syncer = null_page_content_syncer)
+    yield syncer
+  end
 
-    null_collector = Object.new
-    null_collector.define_singleton_method(:call) { |*, **| [] }
-
-    yield null_attacher, null_collector
+  def null_page_content_syncer
+    Object.new.tap do |syncer|
+      syncer.define_singleton_method(:call) do |record, *, **|
+        record.update!(page_content_last_synced_at: Time.current)
+      end
+    end
   end
 
   def notion_page(status: "Успешно выполнен", last_edited_time: "2018-06-02T12:00:00.000Z")
@@ -278,15 +269,4 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     end
   end
 
-  class TrackingMediaAttacher
-    attr_reader :cover_attached, :media_attached
-
-    def attach_cover!(_project)
-      @cover_attached = true
-    end
-
-    def attach_media!(_project, _items)
-      @media_attached = true
-    end
-  end
 end

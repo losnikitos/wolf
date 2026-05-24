@@ -36,14 +36,39 @@ class NotionBlockMediaCollectorTest < ActiveSupport::TestCase
     assert_equal 1, items.size
   end
 
+  test "ignores external embed blocks" do
+    blocks_by_parent = {
+      "page-1" => [
+        video_block("block-video", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", external: true)
+      ]
+    }
+    client = FakeNotionClient.new(blocks_by_parent)
+
+    items = NotionBlockMediaCollector.new(client: client).call("page-1")
+
+    assert_empty items
+  end
+
   private
 
   def image_block(id, url)
     media_block(id, "image", url)
   end
 
-  def video_block(id, url)
-    media_block(id, "video", url)
+  def video_block(id, url, external: false)
+    if external
+      {
+        "id" => id,
+        "type" => "video",
+        "has_children" => false,
+        "video" => {
+          "type" => "external",
+          "external" => { "url" => url }
+        }
+      }
+    else
+      media_block(id, "video", url)
+    end
   end
 
   def media_block(id, type, url)

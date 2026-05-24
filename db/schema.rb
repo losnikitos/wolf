@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_190000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_200000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -59,6 +59,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_190000) do
   create_table "media_appearances", force: :cascade do |t|
     t.date "appearance_date"
     t.boolean "archived", default: false, null: false
+    t.json "body", default: [], null: false
     t.datetime "created_at", null: false
     t.datetime "last_synced_at"
     t.string "location"
@@ -68,6 +69,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_190000) do
     t.string "notion_page_id", null: false
     t.string "notion_url"
     t.string "organizer"
+    t.datetime "page_content_last_synced_at"
     t.integer "project_id"
     t.string "slug"
     t.text "topic"
@@ -94,6 +96,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_190000) do
     t.datetime "notion_last_edited_at"
     t.string "notion_page_id", null: false
     t.string "notion_url"
+    t.datetime "page_content_last_synced_at"
     t.string "project_type"
     t.json "roles", default: [], null: false
     t.string "slug"

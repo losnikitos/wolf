@@ -1,4 +1,6 @@
 class MediaAppearance < ApplicationRecord
+  include NotionPageContent
+
   extend FriendlyId
 
   friendly_id :name, use: :slugged
