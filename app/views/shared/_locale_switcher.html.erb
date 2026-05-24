@@ -1,0 +1,15 @@
+<div class="flex items-center gap-0.5 rounded-full border border-zinc-200 p-0.5 text-xs font-semibold" role="group" aria-label="<%= t("locale.label") %>">
+  <% %i[en ru].each do |locale| %>
+    <% if I18n.locale == locale %>
+      <span class="rounded-full bg-zinc-900 px-2.5 py-1 text-white" aria-current="true"><%= locale.to_s.upcase %></span>
+    <% else %>
+      <%= button_to locale.to_s.upcase,
+            locale_path,
+            method: :patch,
+            params: { locale: locale },
+            form: { class: "inline" },
+            class: "rounded-full px-2.5 py-1 text-zinc-500 transition hover:text-zinc-900",
+            aria: { label: t("locale.switch_#{locale}") } %>
+    <% end %>
+  <% end %>
+</div>

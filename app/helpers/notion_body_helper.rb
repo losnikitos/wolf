@@ -114,7 +114,7 @@ module NotionBodyHelper
       elsif attachment&.video?
         video_tag url_for(attachment), controls: true, playsinline: true, class: "w-full"
       elsif type == "image" && attachment.nil?
-        tag.div("Image unavailable", class: "flex aspect-video items-center justify-center text-sm text-zinc-400")
+        tag.div(t("shared.image_unavailable"), class: "flex aspect-video items-center justify-center text-sm text-zinc-400")
       end
 
       safe_join([
@@ -130,7 +130,7 @@ module NotionBodyHelper
       tag.div(class: "aspect-video") do
         tag.iframe(
           src: youtube_src,
-          title: "Embedded video",
+          title: t("shared.embedded_video"),
           class: "h-full w-full",
           allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
           allowfullscreen: true,

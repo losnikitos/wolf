@@ -1,15 +1,12 @@
-<% content_for :title, "Search" %>
+<% content_for :title, "Поиск" %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
-  <header class="flex flex-col gap-4">
-    <div>
-      <h1 class="text-3xl font-semibold tracking-tight text-zinc-900">Search</h1>
-      <p class="mt-1 text-sm text-zinc-500">Projects, media, clients, and talks by name</p>
-    </div>
+  <header class="flex flex-col items-center gap-4 text-center">
+    <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">Поиск</h1>
 
     <%= form_with url: search_path, method: :get,
           data: { controller: "search", turbo_frame: "search_results", turbo_action: "advance" },
-          class: "relative max-w-md" do |form| %>
+          class: "relative w-full max-w-md" do |form| %>
       <%= form.search_field :q,
             value: @query,
             placeholder: "Search by name…",

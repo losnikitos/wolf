@@ -29,4 +29,8 @@ module ApplicationHelper
   def tw_alert_error_classes
     "mb-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-zinc-900"
   end
+
+  def localized_year_label(year)
+    year == "Unknown" ? t("shared.unknown") : year
+  end
 end

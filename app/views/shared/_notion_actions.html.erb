@@ -6,8 +6,8 @@
             target: "_blank",
             rel: "noopener noreferrer",
             class: notion_action_icon_class,
-            title: "Open in Notion",
-            aria: { label: "Open in Notion" } do %>
+            title: t("shared.open_in_notion"),
+            aria: { label: t("shared.open_in_notion") } do %>
         <%= heroicon "arrow-top-right-on-square", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
       <% end %>
     <% end %>
@@ -16,8 +16,8 @@
           method: :post,
           form: { class: "inline-flex" },
           class: notion_action_icon_class,
-          title: "Sync from Notion",
-          aria: { label: "Sync from Notion" } do %>
+          title: t("shared.sync_from_notion"),
+          aria: { label: t("shared.sync_from_notion") } do %>
       <%= heroicon "arrow-path", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
     <% end %>
   </div>

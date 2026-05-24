@@ -1,31 +1,160 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  site:
+    name: Evgeniy Volk
+    app_name: Wolf
+  locale:
+    label: Language
+    switch_en: Switch to English
+    switch_ru: Switch to Russian
+  nav:
+    clients: Clients
+    projects: Projects
+    media: Media
+    talks: Talks
+    reviews: Reviews
+    search: Search
+  footer:
+    copyright: "© 2023 — Evgeniy Volk"
+    social: Social media
+    telegram: Telegram
+    telegram_channel: Telegram channel
+  shared:
+    breadcrumb: Breadcrumb
+    archived: Archived
+    favorite: Favorite
+    related_project: Related project
+    open_in_notion: Open in Notion
+    sync_from_notion: Sync from Notion
+    image_unavailable: Image unavailable
+    embedded_video: Embedded video
+    unknown: Unknown
+    run_notion_sync: Run a Notion sync to populate this list.
+  home:
+    tagline: Client service, naming, production
+    bio_html: I help launch projects and strengthen existing ones as a creative and product director. More than 190 works for MTV, STS, Za Rulem, the Moscow Marathon, medical centers, stores, and art spaces. I take on turnkey tasks — strategy, naming, design layouts, and distinctive business concepts. I assemble a team for each task, attract press attention, and offer clear solutions. I work quickly, independently, and with a focus on results. You can ask about your project %{link}.
+    bio_telegram_link: via Telegram
+    featured_work: Featured work
+    more_work_html: More work is in the %{link} section.
+    more_work_link: projects
+    empty_portfolio_html: Portfolio and case studies will appear here. For now, see %{link}.
+    empty_portfolio_link: projects
+  projects:
+    title: Projects
+    untitled: Untitled project
+    page_title: Project
+    count:
+      one: 1 project
+      other: "%{count} projects"
+    no_projects: No active projects yet.
+    no_tagged_projects: No active projects tagged with “%{tag}”.
+    tags:
+      roles: Roles
+      deliverables: Deliverables
+      directions: Directions
+    collection_title: "%{label}: %{tag}"
+  clients:
+    title: Clients
+    other_group: Other
+    no_clients: No clients yet.
+    no_projects: No projects linked to this client yet.
+  media:
+    title: Publications
+    nav_title: Media
+    untitled: Untitled appearance
+    page_title: Media appearance
+    no_appearances: No media appearances yet.
+  talks:
+    title: Talks
+    untitled: Untitled talk
+    page_title: Talk
+    no_talks: No talks yet.
+  reviews:
+    title: Reviews
+    untitled: Untitled review
+    page_title: Review
+    no_reviews: No reviews yet.
+  search:
+    title: Search
+    placeholder: Search by name…
+    results_count:
+      one: 1 result for “%{query}”
+      other: "%{count} results for “%{query}”"
+    no_matches: No matches for “%{query}”.
+    try_different: Try a different name.
+  flash:
+    signed_in: Signed in successfully
+    invalid_credentials: That email or password is incorrect
+    session_logged_out: That session has been logged out
+    signed_up: Welcome! You have signed up successfully
+    password_changed: Your password has been changed
+    email_changed: Your email has been changed
+    email_verified: Thank you for verifying your email address
+    verification_sent: We sent a verification email to your email address
+    invalid_verification_link: That email verification link is invalid
+    reset_instructions_sent: Check your email for reset instructions
+    verify_before_reset: You can't reset your password until you verify your email
+    password_reset_success: Your password was reset successfully. Please sign in
+    invalid_reset_link: That password reset link is invalid
+    notion_up_to_date: Already up to date.
+    notion_synced: Synced from Notion.
+    notion_sync_failed: Could not sync from Notion.
+  date:
+    formats:
+      default: "%m/%d/%Y"
+      short: "%b %-d"
+      long: "%B %-d, %Y"
+    day_names:
+      - Sunday
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+    abbr_day_names:
+      - Sun
+      - Mon
+      - Tue
+      - Wed
+      - Thu
+      - Fri
+      - Sat
+    month_names:
+      - ~
+      - January
+      - February
+      - March
+      - April
+      - May
+      - June
+      - July
+      - August
+      - September
+      - October
+      - November
+      - December
+    abbr_month_names:
+      - ~
+      - Jan
+      - Feb
+      - Mar
+      - Apr
+      - May
+      - Jun
+      - Jul
+      - Aug
+      - Sep
+      - Oct
+      - Nov
+      - Dec
+    order:
+      - :month
+      - :day
+      - :year
+  time:
+    formats:
+      default: "%B %-d, %Y, %H:%M"
+      short: "%b %-d, %H:%M"
+      long: "%B %-d, %Y, %H:%M"
+    am: am
+    pm: pm

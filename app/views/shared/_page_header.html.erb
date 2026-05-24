@@ -1,7 +1,7 @@
 <%# locals: title (required), breadcrumbs (array of { label:, path:, current: }) %>
 <header class="flex flex-col gap-4">
   <% if local_assigns[:breadcrumbs]&.any? %>
-    <nav class="text-sm" aria-label="Breadcrumb">
+    <nav class="text-sm" aria-label="<%= t("shared.breadcrumb") %>">
       <% breadcrumbs.each_with_index do |crumb, index| %>
         <% if index.positive? %>
           <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>

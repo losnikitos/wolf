@@ -8,9 +8,9 @@ module ProjectsHelper
   end
 
   TAG_LABELS = {
-    "roles" => "Roles",
-    "deliverables" => "Deliverables",
-    "directions" => "Directions"
+    "roles" => "projects.tags.roles",
+    "deliverables" => "projects.tags.deliverables",
+    "directions" => "projects.tags.directions"
   }.freeze
 
   def project_tag_path(kind, tag)
@@ -18,11 +18,11 @@ module ProjectsHelper
   end
 
   def project_tag_kind_label(kind)
-    TAG_LABELS.fetch(kind)
+    t(TAG_LABELS.fetch(kind))
   end
 
   def project_collection_title(kind, tag)
-    "#{project_tag_kind_label(kind)}: #{tag}"
+    t("projects.collection_title", label: project_tag_kind_label(kind), tag: tag)
   end
 
   def project_tag_link_class

@@ -11,7 +11,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   test "index renders search page" do
     get search_url
     assert_response :success
-    assert_select "h1", "Search"
+    assert_select "h1", "Поиск"
   end
 
   test "index searches active records by name across entity types" do

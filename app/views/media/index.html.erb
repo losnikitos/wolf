@@ -1,9 +1,9 @@
-<% content_for :title, "Media" %>
+<% content_for :title, "Публикации" %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-5 pb-16 pt-10 sm:px-8">
   <%= render "shared/page_header",
-        title: "Media",
-        breadcrumbs: [{ label: "Media", current: true }] %>
+        title: "Публикации",
+        breadcrumbs: [{ label: "Публикации", current: true }] %>
 
   <% if @appearances_by_year.any? %>
     <% @year_names.each do |year_name| %>

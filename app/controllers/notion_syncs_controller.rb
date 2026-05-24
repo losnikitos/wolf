@@ -10,15 +10,15 @@ class NotionSyncsController < ApplicationController
     head :not_found
   rescue StandardError => e
     Rails.logger.error("[NotionSyncsController] Sync failed: #{e.class} #{e.message}")
-    redirect_back fallback_location: root_path, alert: "Could not sync from Notion."
+    redirect_back fallback_location: root_path, alert: t("flash.notion_sync_failed")
   end
 
   private
 
   def sync_notice(result)
     case result.updated + result.created
-    when 0 then "Already up to date."
-    else "Synced from Notion."
+    when 0 then t("flash.notion_up_to_date")
+    else t("flash.notion_synced")
     end
   end
 end

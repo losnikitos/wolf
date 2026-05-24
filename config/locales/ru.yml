@@ -1,0 +1,164 @@
+ru:
+  site:
+    name: Евгений Волк
+    app_name: Wolf
+  locale:
+    label: Язык
+    switch_en: Переключить на английский
+    switch_ru: Переключить на русский
+  nav:
+    clients: Клиенты
+    projects: Проекты
+    media: Медиа
+    talks: Выступления
+    reviews: Отзывы
+    search: Поиск
+  footer:
+    copyright: "© 2023 — Евгений Волк"
+    social: Социальные сети
+    telegram: Telegram
+    telegram_channel: Телеграм-канал
+  shared:
+    breadcrumb: Навигационная цепочка
+    archived: В архиве
+    favorite: Избранное
+    related_project: Связанный проект
+    open_in_notion: Открыть в Notion
+    sync_from_notion: Синхронизировать из Notion
+    image_unavailable: Изображение недоступно
+    embedded_video: Встроенное видео
+    unknown: Без даты
+    run_notion_sync: Запустите синхронизацию с Notion, чтобы заполнить список.
+  home:
+    tagline: Клиентский сервис, нейминг, продакшен
+    bio_html: Помогаю запускать проекты и усиливать действующие в качестве креативного и продуктового директора. Более 190 работ для MTV, СТС, «За рулём», Московского марафона, медицинских центров, магазинов и арт-пространств. Берусь за задачи под ключ — формирую стратегию, нейминг, дизайн-макеты и яркие бизнес-концепции с конкурентным отличием. Формирую команду под задачу, привлекаю внимание прессы, предлагаю чёткие решения. Работаю быстро, самостоятельно и с фокусом на результат. Задать вопрос о своём проекте можно %{link}.
+    bio_telegram_link: через Telegram
+    featured_work: Избранные работы
+    more_work_html: Больше работ — в разделе %{link}.
+    more_work_link: проекты
+    empty_portfolio_html: Портфолио и кейсы появятся здесь. Пока можно посмотреть %{link}.
+    empty_portfolio_link: проекты
+  projects:
+    title: Проекты
+    untitled: Проект без названия
+    page_title: Проект
+    count:
+      one: 1 проект
+      few: "%{count} проекта"
+      many: "%{count} проектов"
+      other: "%{count} проектов"
+    no_projects: Активных проектов пока нет.
+    no_tagged_projects: Нет активных проектов с меткой «%{tag}».
+    tags:
+      roles: Роли
+      deliverables: Результаты
+      directions: Направления
+    collection_title: "%{label}: %{tag}"
+  clients:
+    title: Клиенты
+    other_group: Другое
+    no_clients: Клиентов пока нет.
+    no_projects: К этому клиенту пока не привязано проектов.
+  media:
+    title: Публикации
+    nav_title: Медиа
+    untitled: Публикация без названия
+    page_title: Публикация
+    no_appearances: Публикаций пока нет.
+  talks:
+    title: Выступления
+    untitled: Выступление без названия
+    page_title: Выступление
+    no_talks: Выступлений пока нет.
+  reviews:
+    title: Отзывы
+    untitled: Отзыв без названия
+    page_title: Отзыв
+    no_reviews: Отзывов пока нет.
+  search:
+    title: Поиск
+    placeholder: Поиск по названию…
+    results_count:
+      one: 1 результат по запросу «%{query}»
+      few: "%{count} результата по запросу «%{query}»"
+      many: "%{count} результатов по запросу «%{query}»"
+      other: "%{count} результатов по запросу «%{query}»"
+    no_matches: По запросу «%{query}» ничего не найдено.
+    try_different: Попробуйте другое название.
+  flash:
+    signed_in: Вы успешно вошли
+    invalid_credentials: Неверный email или пароль
+    session_logged_out: Сессия завершена
+    signed_up: Регистрация прошла успешно
+    password_changed: Пароль изменён
+    email_changed: Email изменён
+    email_verified: Спасибо за подтверждение email
+    verification_sent: Мы отправили письмо для подтверждения на ваш email
+    invalid_verification_link: Ссылка для подтверждения email недействительна
+    reset_instructions_sent: Проверьте email — мы отправили инструкции для сброса пароля
+    verify_before_reset: Сначала подтвердите email, чтобы сбросить пароль
+    password_reset_success: Пароль успешно сброшен. Войдите в аккаунт
+    invalid_reset_link: Ссылка для сброса пароля недействительна
+    notion_up_to_date: Уже актуально.
+    notion_synced: Синхронизировано из Notion.
+    notion_sync_failed: Не удалось синхронизировать из Notion.
+  date:
+    formats:
+      default: "%d.%m.%Y"
+      short: "%-d %b"
+      long: "%-d %B %Y"
+    day_names:
+      - воскресенье
+      - понедельник
+      - вторник
+      - среда
+      - четверг
+      - пятница
+      - суббота
+    abbr_day_names:
+      - Вс
+      - Пн
+      - Вт
+      - Ср
+      - Чт
+      - Пт
+      - Сб
+    month_names:
+      - ~
+      - января
+      - февраля
+      - марта
+      - апреля
+      - мая
+      - июня
+      - июля
+      - августа
+      - сентября
+      - октября
+      - ноября
+      - декабря
+    abbr_month_names:
+      - ~
+      - янв.
+      - февр.
+      - марта
+      - апр.
+      - мая
+      - июня
+      - июля
+      - авг.
+      - сент.
+      - окт.
+      - нояб.
+      - дек.
+    order:
+      - :day
+      - :month
+      - :year
+  time:
+    formats:
+      default: "%d %B, %H:%M"
+      short: "%d %b, %H:%M"
+      long: "%-d %B %Y, %H:%M"
+    am: ""
+    pm: ""

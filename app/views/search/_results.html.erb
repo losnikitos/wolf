@@ -1,6 +1,4 @@
-<% if @query.blank? %>
-  <p class="text-sm text-zinc-500">Type a name to search across projects, media, clients, talks, and reviews.</p>
-<% else %>
+<% if @query.present? %>
   <% total = @projects.size + @clients.size + @media_appearances.size + @talks.size + @reviews.size %>
   <p class="text-sm tabular-nums text-zinc-500"><%= pluralize(total, "result") %> for “<%= h(@query) %>”</p>
 
