@@ -1,7 +1,8 @@
 <footer class="border-t border-zinc-200/80 bg-white">
   <div class="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-    <p class="flex items-center gap-2 text-sm text-zinc-500">
-      <%= t("footer.copyright") %>
+    <div class="flex items-center gap-2 text-sm text-zinc-500">
+      <span><%= t("footer.copyright") %></span>
+
       <% if Current.session %>
         <%= button_to sign_out_path,
               method: :delete,
@@ -19,7 +20,7 @@
           <%= heroicon "lock-closed", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
         <% end %>
       <% end %>
-    </p>
+    </div>
 
     <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm sm:justify-end" aria-label="<%= t("footer.social") %>">
       <%= link_to t("footer.telegram"),
