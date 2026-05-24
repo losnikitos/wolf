@@ -57,21 +57,23 @@
       <% end %>
 
       <% sections = [
-        ["Roles", Array(@project.roles)],
-        ["Deliverables", Array(@project.deliverables)],
-        ["Directions", Array(@project.directions)]
-      ].reject { |_, items| items.blank? } %>
+        ["roles", "Roles", Array(@project.roles)],
+        ["deliverables", "Deliverables", Array(@project.deliverables)],
+        ["directions", "Directions", Array(@project.directions)]
+      ].reject { |_, _, items| items.blank? } %>
 
       <% if sections.any? %>
         <dl class="mt-8 space-y-6 border-t border-zinc-100 pt-8">
-          <% sections.each do |label, items| %>
+          <% sections.each do |kind, label, items| %>
             <div>
               <dt class="text-xs font-semibold uppercase tracking-wide text-zinc-400"><%= label %></dt>
               <dd class="mt-2">
                 <ul class="flex flex-wrap gap-2">
                   <% items.each do |item| %>
                     <% next if item.blank? %>
-                    <li class="rounded-lg bg-zinc-50 px-3 py-1.5 text-sm text-zinc-700 ring-1 ring-inset ring-zinc-200/80"><%= item %></li>
+                    <li>
+                      <%= link_to item, project_tag_path(kind, item), class: project_tag_link_class %>
+                    </li>
                   <% end %>
                 </ul>
               </dd>

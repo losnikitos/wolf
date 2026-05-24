@@ -32,6 +32,22 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 2, Project.matching_phrase("   ").count
   end
 
+  test "with_tag filters by json tag column" do
+    create_project!(name: "Room", deliverables: [ "Помещение" ], roles: [ "Продюсер" ])
+    create_project!(name: "Event", deliverables: [ "Мероприятие" ])
+    create_project!(name: "Archived room", deliverables: [ "Помещение" ], archived: true)
+
+    assert_equal [ "Archived room", "Room" ], Project.with_tag(:deliverables, "Помещение").order(:name).pluck(:name)
+    assert_equal [ "Archived room", "Room" ], Project.with_tag("deliverables", "Помещение").order(:name).pluck(:name)
+    assert_equal [ "Room" ], Project.active.with_tag(:deliverables, "Помещение").pluck(:name)
+    assert_equal [ "Room" ], Project.with_tag(:roles, "Продюсер").pluck(:name)
+    assert_empty Project.with_tag(:deliverables, "Несуществующий")
+  end
+
+  test "with_tag raises for unknown kind" do
+    assert_raises(ArgumentError) { Project.with_tag(:unknown, "x") }
+  end
+
   private
 
   def create_project!(**attrs)

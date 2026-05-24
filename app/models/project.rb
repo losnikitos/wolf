@@ -27,8 +27,21 @@ class Project < ApplicationRecord
     media.find { |attachment| attachment.blob.metadata["notion_block_id"] == notion_block_id }
   end
 
+  TAG_KINDS = %w[roles deliverables directions].freeze
+
   scope :favorites, -> { where(favorite: true) }
   scope :active, -> { where(archived: false) }
+
+  scope :with_tag, ->(kind, value) {
+    kind = kind.to_s
+    raise ArgumentError, "unknown tag kind: #{kind}" unless TAG_KINDS.include?(kind)
+
+    value = value.to_s
+    where(
+      "EXISTS (SELECT 1 FROM json_each(#{table_name}.#{kind}) WHERE value = ?)",
+      value
+    )
+  }
 
   SEARCHABLE_COLUMNS = %w[name client city project_type status].freeze
 

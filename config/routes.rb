@@ -23,6 +23,13 @@ Rails.application.routes.draw do
 
   root "projects#index"
 
-  resources :projects, only: %i[index]
+  resources :projects, only: %i[index] do
+    collection do
+      get ":kind/:tag",
+          to: "projects#collection",
+          as: :collection,
+          constraints: { kind: /roles|deliverables|directions/ }
+    end
+  end
   get "project/:slug", to: "projects#show", as: :project
 end
