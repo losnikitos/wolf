@@ -1,7 +1,7 @@
 <% if @query.blank? %>
-  <p class="text-sm text-zinc-500">Type a name to search across projects, media, clients, and talks.</p>
+  <p class="text-sm text-zinc-500">Type a name to search across projects, media, clients, talks, and reviews.</p>
 <% else %>
-  <% total = @projects.size + @clients.size + @media_appearances.size + @talks.size %>
+  <% total = @projects.size + @clients.size + @media_appearances.size + @talks.size + @reviews.size %>
   <p class="text-sm tabular-nums text-zinc-500"><%= pluralize(total, "result") %> for “<%= h(@query) %>”</p>
 
   <% if total.zero? %>
@@ -60,6 +60,23 @@
                     data: { turbo_frame: "_top" },
                     class: "group block rounded-xl border border-zinc-200/80 bg-white px-5 py-3 shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
                 <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= client.name %></span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+
+    <% if @reviews.any? %>
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400">Reviews</h2>
+        <ul class="flex flex-col gap-2">
+          <% @reviews.each do |review| %>
+            <li>
+              <%= link_to review_path(review),
+                    data: { turbo_frame: "_top" },
+                    class: "group block rounded-xl border border-zinc-200/80 bg-white px-5 py-3 shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
+                <span class="font-medium text-zinc-900 group-hover:text-zinc-700"><%= review.name.presence || "Untitled review" %></span>
               <% end %>
             </li>
           <% end %>

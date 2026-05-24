@@ -7,11 +7,13 @@ class SearchController < ApplicationController
       @clients = Client.active.matching_name(@query).ordered
       @media_appearances = MediaAppearance.active.matching_name(@query).ordered
       @talks = Talk.active.matching_name(@query).ordered
+      @reviews = Review.active.matching_name(@query).ordered
     else
       @projects = Project.none
       @clients = Client.none
       @media_appearances = MediaAppearance.none
       @talks = Talk.none
+      @reviews = Review.none
     end
   end
 end

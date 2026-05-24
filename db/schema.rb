@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_210000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_220000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -108,6 +108,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_210000) do
     t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["status"], name: "index_projects_on_status"
     t.index ["year"], name: "index_projects_on_year"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.boolean "archived", default: false, null: false
+    t.json "body", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "last_synced_at"
+    t.string "name"
+    t.datetime "notion_created_at"
+    t.datetime "notion_last_edited_at"
+    t.string "notion_page_id", null: false
+    t.string "notion_url"
+    t.datetime "page_content_last_synced_at"
+    t.string "slug"
+    t.datetime "updated_at", null: false
+    t.index ["notion_created_at"], name: "index_reviews_on_notion_created_at"
+    t.index ["notion_page_id"], name: "index_reviews_on_notion_page_id", unique: true
+    t.index ["slug"], name: "index_reviews_on_slug", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|

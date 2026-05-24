@@ -1,0 +1,23 @@
+<% if reviews.any? %>
+  <ul class="grid gap-4 sm:grid-cols-2">
+    <% reviews.each do |review| %>
+      <li>
+        <%= link_to review_path(review),
+              class: "group flex h-full flex-col rounded-xl border border-zinc-200/80 bg-white px-5 py-4 shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
+          <h2 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
+            <%= review.name.presence || "Untitled review" %>
+          </h2>
+          <% if review.notion_created_at.present? %>
+            <p class="mt-auto pt-3 text-xs text-zinc-400">
+              <%= l(review.notion_created_at.to_date, format: :long) %>
+            </p>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% elsif local_assigns[:empty_message].present? %>
+  <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center">
+    <p class="text-zinc-600"><%= empty_message %></p>
+  </div>
+<% end %>
