@@ -1,0 +1,6 @@
+<% width = local_assigns.fetch(:width, "max-w-md") %>
+<div class="flex flex-1 flex-col justify-center px-5 py-8 sm:px-8 sm:py-12">
+  <div class="mx-auto w-full <%= width %> rounded-2xl border border-zinc-200 bg-white px-6 py-8 shadow-sm sm:px-8 sm:py-10">
+    <%= yield %>
+  </div>
+</div>

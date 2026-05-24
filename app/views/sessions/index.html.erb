@@ -1,34 +1,36 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Devices & Sessions</h1>
-
-<div id="sessions">
-  <% @sessions.each do |session| %>
-    <div id="<%= dom_id session %>">
-      <p>
-        <strong>User Agent:</strong>
-        <%= session.user_agent %>
-      </p>
-
-      <p>
-        <strong>Ip Address:</strong>
-        <%= session.ip_address %>
-      </p>
-
-      <p>
-        <strong>Created at:</strong>
-        <%= session.created_at %>
-      </p>
-
-    </div>
-    <p>
-      <%= button_to "Log out", session, method: :delete %>
-    </p>
+<%= render layout: "shared/auth_card", locals: { width: "max-w-2xl" } do %>
+  <% if notice.present? %>
+    <p class="<%= tw_alert_success_classes %>"><%= notice %></p>
   <% end %>
-</div>
 
-<br>
+  <h1 class="text-center text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl">Devices &amp; sessions</h1>
+  <p class="mt-2 text-center text-sm text-zinc-600">Signed-in devices for your account.</p>
 
-<div>
-  <%= link_to "Back", root_path %>
-</div>
+  <div id="sessions" class="mt-8 space-y-6">
+    <% @sessions.each do |session| %>
+      <div id="<%= dom_id session %>" class="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
+        <dl class="space-y-2 text-sm text-zinc-700">
+          <div>
+            <dt class="font-medium text-zinc-900">User agent</dt>
+            <dd class="mt-0.5 break-all text-zinc-600"><%= session.user_agent %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-zinc-900">IP address</dt>
+            <dd class="mt-0.5 text-zinc-600"><%= session.ip_address %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-zinc-900">Created</dt>
+            <dd class="mt-0.5 text-zinc-600"><%= session.created_at %></dd>
+          </div>
+        </dl>
+        <div class="mt-4 border-t border-zinc-200 pt-4">
+          <%= button_to "Log out this session", session, method: :delete, class: "inline-flex cursor-pointer items-center justify-center rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-8 border-t border-zinc-200 pt-6 text-center">
+    <%= link_to "Back to home", root_path, class: tw_text_link_classes %>
+  </div>
+<% end %>
