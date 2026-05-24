@@ -3,12 +3,14 @@
 <% if projects.any? %>
   <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
     <% projects.each do |project| %>
+      <% project_title = project.name.presence || t("projects.untitled") %>
       <li>
         <%= link_to project_path_for(project, client: local_assigns[:client]), data: { turbo_frame: "_top" }, class: "group block h-full rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
           <article class="flex h-full flex-col overflow-hidden rounded-2xl">
             <div class="relative overflow-hidden">
               <%= render "shared/cover",
                     record: project,
+                    title: project_title,
                     media_class: "h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" %>
               <% if project.favorite? %>
                 <span class="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-amber-400/95 text-amber-950 shadow-sm backdrop-blur-sm" title="<%= t("shared.favorite") %>">
@@ -27,9 +29,11 @@
                   <span class="inline-flex rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-800"><%= project.status %></span>
                 <% end %>
               </div>
-              <h2 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
-                <%= project.name.presence || t("projects.untitled") %>
-              </h2>
+              <% if project.cover_for_display? %>
+                <h2 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
+                  <%= project_title %>
+                </h2>
+              <% end %>
               <% if project.client&.name.present? %>
                 <p class="text-sm text-zinc-500"><%= project.client.name %></p>
               <% end %>

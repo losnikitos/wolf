@@ -1,12 +1,14 @@
 <% if talks.any? %>
   <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
     <% talks.each do |talk| %>
+      <% talk_title = talk.name.presence || t("talks.untitled") %>
       <li>
         <%= link_to talk_path(talk),
               class: "group block h-full rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
           <article class="flex h-full flex-col overflow-hidden rounded-2xl">
             <%= render "shared/cover",
                   record: talk,
+                  title: talk_title,
                   media_class: "h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" %>
             <div class="flex flex-1 flex-col gap-3 p-5">
               <div class="flex flex-wrap items-center gap-2">
@@ -16,9 +18,11 @@
                   </span>
                 <% end %>
               </div>
-              <h2 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
-                <%= talk.name.presence || t("talks.untitled") %>
-              </h2>
+              <% if talk.cover_for_display? %>
+                <h2 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
+                  <%= talk_title %>
+                </h2>
+              <% end %>
               <% if talk.organizer.present? %>
                 <p class="text-sm text-zinc-500"><%= talk.organizer %></p>
               <% end %>

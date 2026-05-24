@@ -1,4 +1,4 @@
-<%# locals: (record:, aspect_class: "aspect-[16/10]", media_class: "h-full w-full object-cover") %>
+<%# locals: (record:, aspect_class: "aspect-[16/10]", media_class: "h-full w-full object-cover", title: nil, show_title: true) %>
 <% cover_attachment = record.cover_for_display %>
 <% if cover_attachment %>
   <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
@@ -18,8 +18,8 @@
   <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
     <%= image_tag record.cover_url, alt: "", class: media_class %>
   </div>
-<% else %>
-  <div class="<%= aspect_class %> flex items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200">
-    <span class="text-4xl font-medium text-zinc-300"><%= (record.name&.first || "?").upcase %></span>
+<% elsif show_title && (display_title = title.presence || record.name.presence) %>
+  <div class="px-5 pt-5 pb-1">
+    <h2 class="text-xl font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700 sm:text-2xl"><%= display_title %></h2>
   </div>
 <% end %>
