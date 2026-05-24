@@ -3,6 +3,6 @@ namespace :notion do
   task sync_projects: :environment do
     result = NotionProjectsSyncer.new.call
 
-    puts "Synced #{result.total} projects (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged)."
+    puts "Synced #{result.total} projects (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped)."
   end
 end

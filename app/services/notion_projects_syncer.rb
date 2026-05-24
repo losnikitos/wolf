@@ -1,7 +1,7 @@
 class NotionProjectsSyncer
-  Result = Struct.new(:created, :updated, :unchanged, keyword_init: true) do
+  Result = Struct.new(:created, :updated, :unchanged, :skipped, keyword_init: true) do
     def total
-      created + updated + unchanged
+      created + updated + unchanged + skipped
     end
   end
 
@@ -19,19 +19,31 @@ class NotionProjectsSyncer
     directions: { property: "Направление", type: :multi_select }
   }.freeze
 
-  def initialize(client: nil, database_id: Project::NOTION_DATABASE_ID, media_attacher: NotionMediaAttacher)
+  def initialize(
+    client: nil,
+    database_id: Project::NOTION_DATABASE_ID,
+    media_attacher: NotionMediaAttacher,
+    block_media_collector: NotionBlockMediaCollector,
+    progress_logger: nil
+  )
     @client = client || Notion::Client.new
     @database_id = database_id
     @media_attacher = media_attacher
+    @block_media_collector = block_media_collector
+    @progress_logger = progress_logger.nil? ? ->(message) { $stdout.puts(message) } : progress_logger
   end
 
   def call
-    counts = { created: 0, updated: 0, unchanged: 0 }
+    counts = { created: 0, updated: 0, unchanged: 0, skipped: 0 }
+    pages = fetch_pages
+    total = pages.size
 
-    @client.database_query(database_id: @database_id, page_size: 100) do |response|
-      response.results.each do |page|
-        counts[upsert(page)] += 1
-      end
+    log_progress("Found #{total} projects in Notion")
+
+    pages.each_with_index do |page, index|
+      outcome = upsert(page)
+      counts[outcome] += 1
+      log_record_progress(index + 1, total, page, outcome)
     end
 
     Result.new(**counts)
@@ -41,6 +53,8 @@ class NotionProjectsSyncer
 
   def upsert(page)
     project = Project.find_or_initialize_by(notion_page_id: page.id)
+    return :skipped unless needs_sync?(project, page)
+
     was_new_record = project.new_record?
 
     project.assign_attributes(attributes_for(page))
@@ -48,12 +62,27 @@ class NotionProjectsSyncer
 
     project.last_synced_at = Time.current
     project.save!
-    @media_attacher.attach_cover!(project)
+    sync_media!(project, page)
 
     return :created if was_new_record
     return :updated if content_changed
 
     :unchanged
+  end
+
+  def needs_sync?(project, page)
+    return true if project.new_record? || project.last_synced_at.nil?
+    return true if project.media.none?
+
+    edited_at = parse_time(page.last_edited_time)
+    edited_at.nil? || edited_at > project.last_synced_at
+  end
+
+  def sync_media!(project, page)
+    @media_attacher.attach_cover!(project)
+
+    items = @block_media_collector.call(page.id, client: @client)
+    @media_attacher.attach_media!(project, items)
   end
 
   def attributes_for(page)
@@ -105,5 +134,28 @@ class NotionProjectsSyncer
 
   def parse_time(value)
     Time.zone.parse(value) if value.present?
+  end
+
+  def fetch_pages
+    pages = []
+    @client.database_query(database_id: @database_id, page_size: 100) do |response|
+      pages.concat(response.results)
+    end
+    pages
+  end
+
+  def log_record_progress(completed, total, page, outcome)
+    label = page_label(page)
+    log_progress("[#{completed}/#{total}] #{label} — #{outcome}")
+  end
+
+  def page_label(page)
+    property = page.properties&.dig("Проект")
+    title = property && extract(property, :title)
+    title.presence || page.id
+  end
+
+  def log_progress(message)
+    @progress_logger.call(message)
   end
 end
