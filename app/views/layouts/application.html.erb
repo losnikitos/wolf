@@ -22,8 +22,9 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="min-h-screen bg-white text-zinc-900 antialiased">
+    <%= render "shared/site_header" unless content_for?(:hide_site_header) %>
+    <main class="flex min-h-[calc(100vh-3.5rem)] w-full flex-col">
       <%= yield %>
     </main>
   </body>
