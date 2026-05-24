@@ -51,15 +51,7 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
         progress_logger: ->(_) {}
       ).call
     end
-    project = Project.last
-    project.media.attach(
-      io: StringIO.new("synced"),
-      filename: "placeholder.png",
-      content_type: "image/png",
-      metadata: { notion_block_id: "block-placeholder", notion_url: "https://files.notion/placeholder.png" }
-    )
-    project.update!(body: [ { "type" => "paragraph", "id" => "synced", "rich_text" => [ { "text" => "Synced" } ] } ])
-    first_sync = project.reload.last_synced_at
+    first_sync = Project.last.last_synced_at
 
     travel 1.minute do
       result = with_stubbed_media_sync do |media_attacher, block_collector|
@@ -78,7 +70,7 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     end
   end
 
-  test "syncs when notion last_edited_at is newer than last_synced_at" do
+  test "syncs when notion last_edited_at is newer than cached value" do
     client = FakeNotionClient.new([ notion_page ])
     with_stubbed_media_sync do |media_attacher, block_collector|
       NotionProjectsSyncer.new(
@@ -105,7 +97,7 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     assert_equal Time.zone.parse("2026-05-13T12:00:00.000Z"), Project.last.notion_last_edited_at
   end
 
-  test "backfills body when project has empty body despite prior sync" do
+  test "force sync updates project even when notion last_edited_at is unchanged" do
     edited_at = Time.zone.parse("2018-06-02T12:00:00.000Z")
     blocks = [
       {
@@ -115,18 +107,12 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
         "children" => []
       }
     ]
-    project = Project.create!(
+    Project.create!(
       notion_page_id: "page-1",
       name: "Existing",
       body: [],
       last_synced_at: 1.hour.ago,
       notion_last_edited_at: edited_at
-    )
-    project.media.attach(
-      io: StringIO.new("synced"),
-      filename: "placeholder.png",
-      content_type: "image/png",
-      metadata: { notion_block_id: "block-placeholder", notion_url: "https://files.notion/placeholder.png" }
     )
     client = FakeNotionClient.new([ notion_page(last_edited_time: edited_at.iso8601) ], blocks: blocks)
 
@@ -135,37 +121,14 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
         client: client,
         media_attacher: media_attacher,
         block_media_collector: block_collector,
-        progress_logger: ->(_) {}
-      ).call
+        progress_logger: ->(_) {},
+        force: true
+      ).call(notion_page_id: "page-1")
 
       assert_equal 0, result.skipped
+      assert_equal 1, result.updated
       assert_equal "Backfilled", Project.find_by!(notion_page_id: "page-1").body.first["rich_text"].first["text"]
     end
-  end
-
-  test "backfills media when project has no attachments despite prior sync" do
-    edited_at = Time.zone.parse("2018-06-02T12:00:00.000Z")
-    project = Project.create!(
-      notion_page_id: "page-1",
-      name: "Existing",
-      last_synced_at: 1.hour.ago,
-      notion_last_edited_at: edited_at
-    )
-    client = FakeNotionClient.new([ notion_page(last_edited_time: edited_at.iso8601) ])
-
-    media_attacher = TrackingMediaAttacher.new
-    block_collector = ->(page_id, client:) { [] }
-
-    result = NotionProjectsSyncer.new(
-      client: client,
-      media_attacher: media_attacher,
-      block_media_collector: block_collector,
-      progress_logger: ->(_) {}
-    ).call
-
-    assert_equal 0, result.skipped
-    assert media_attacher.cover_attached
-    assert media_attacher.media_attached
   end
 
   test "detects updates when Notion values change" do
@@ -299,6 +262,10 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
 
     def database_query(**_options)
       yield OpenStruct.new(results: @pages)
+    end
+
+    def page(page_id:)
+      @pages.find { |page| page.id == page_id } || raise("Unknown page #{page_id}")
     end
 
     def block_children(**_options)

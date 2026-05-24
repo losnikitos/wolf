@@ -26,7 +26,8 @@ class NotionProjectsSyncer
     block_media_collector: NotionBlockMediaCollector,
     blocks_fetcher: NotionBlocksFetcher,
     body_parser: NotionBodyParser,
-    progress_logger: nil
+    progress_logger: nil,
+    force: false
   )
     @client = client || Notion::Client.new
     @database_id = database_id
@@ -35,17 +36,21 @@ class NotionProjectsSyncer
     @blocks_fetcher = blocks_fetcher
     @body_parser = body_parser
     @progress_logger = progress_logger.nil? ? ->(message) { $stdout.puts(message) } : progress_logger
+    @force = force
   end
 
-  def call
+  def call(notion_page_id: nil)
+    pages = notion_page_id ? [ fetch_page(notion_page_id) ] : fetch_pages
+    projects_by_page_id = Project.where(notion_page_id: pages.map(&:id)).index_by(&:notion_page_id)
+
     counts = { created: 0, updated: 0, unchanged: 0, skipped: 0 }
-    pages = fetch_pages
     total = pages.size
 
     log_progress("Found #{total} projects in Notion")
 
     pages.each_with_index do |page, index|
-      outcome = upsert(page)
+      project = projects_by_page_id[page.id] || Project.new(notion_page_id: page.id)
+      outcome = upsert(project, page)
       counts[outcome] += 1
       log_record_progress(index + 1, total, page, outcome)
     end
@@ -55,9 +60,8 @@ class NotionProjectsSyncer
 
   private
 
-  def upsert(page)
-    project = Project.find_or_initialize_by(notion_page_id: page.id)
-    return :skipped unless needs_sync?(project, page)
+  def upsert(project, page)
+    return :skipped unless @force || needs_sync?(project, page)
 
     was_new_record = project.new_record?
 
@@ -75,12 +79,12 @@ class NotionProjectsSyncer
   end
 
   def needs_sync?(project, page)
-    return true if project.new_record? || project.last_synced_at.nil?
-    return true if project.media.none?
-    return true if project.body.blank?
+    return true if project.new_record?
 
     edited_at = parse_time(page.last_edited_time)
-    edited_at.nil? || edited_at > project.last_synced_at
+    return true if edited_at.nil? || project.notion_last_edited_at.nil?
+
+    edited_at > project.notion_last_edited_at
   end
 
   def sync_media!(project, page)
@@ -145,6 +149,10 @@ class NotionProjectsSyncer
 
   def parse_time(value)
     Time.zone.parse(value) if value.present?
+  end
+
+  def fetch_page(page_id)
+    @client.page(page_id: page_id)
   end
 
   def fetch_pages
