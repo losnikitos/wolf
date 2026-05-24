@@ -20,21 +20,5 @@
     </div>
 
     <%= render "shared/notion_body", record: @review %>
-
-    <% if @review.notion_created_at.present? || @review.notion_last_edited_at.present? || @review.last_synced_at.present? %>
-      <footer class="border-t border-zinc-100 pt-6 text-xs text-zinc-400">
-        <ul class="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1">
-          <% if @review.notion_created_at.present? %>
-            <li>Created in Notion <%= l(@review.notion_created_at, format: :long) %></li>
-          <% end %>
-          <% if @review.notion_last_edited_at.present? %>
-            <li>Last edited <%= l(@review.notion_last_edited_at, format: :long) %></li>
-          <% end %>
-          <% if @review.last_synced_at.present? %>
-            <li>Synced <%= time_ago_in_words(@review.last_synced_at) %> ago</li>
-          <% end %>
-        </ul>
-      </footer>
-    <% end %>
   </div>
 </div>
