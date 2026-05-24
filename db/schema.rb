@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_092257) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_150623) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -56,10 +56,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_092257) do
     t.string "notion_url"
     t.string "project_type"
     t.json "roles", default: [], null: false
+    t.string "slug"
     t.string "status"
     t.datetime "updated_at", null: false
     t.integer "year"
     t.index ["notion_page_id"], name: "index_projects_on_notion_page_id", unique: true
+    t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["status"], name: "index_projects_on_status"
     t.index ["year"], name: "index_projects_on_year"
   end

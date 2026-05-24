@@ -70,3 +70,5 @@ gem "notion-ruby-client", "~> 1.2"
 gem "tailwindcss-rails", "~> 4.4"
 
 gem "authentication-zero", "~> 4.0"
+
+gem "friendly_id", "~> 5.7"

@@ -1,4 +1,8 @@
 class Project < ApplicationRecord
+  extend FriendlyId
+
+  friendly_id :name, use: :slugged
+
   NOTION_DATABASE_ID = "16e875f5-4593-80dc-8566-f871610e6bdf".freeze
 
   MEDIA_CONTENT_TYPES = %w[
@@ -21,4 +25,12 @@ class Project < ApplicationRecord
 
   scope :favorites, -> { where(favorite: true) }
   scope :active, -> { where(archived: false) }
+
+  def slug_candidates
+    [ :name, :notion_page_id ]
+  end
+
+  def should_generate_new_friendly_id?
+    slug.blank? || will_save_change_to_name?
+  end
 end

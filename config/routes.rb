@@ -23,5 +23,6 @@ Rails.application.routes.draw do
 
   root "projects#index"
 
-  resources :projects, only: %i[index show]
+  resources :projects, only: %i[index]
+  get "project/:slug", to: "projects#show", as: :project
 end
