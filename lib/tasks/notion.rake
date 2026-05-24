@@ -6,8 +6,15 @@ namespace :notion do
     puts "Synced #{result.total} clients (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped)."
   end
 
-  desc "Sync clients and projects from Notion"
-  task sync: %i[sync_clients sync_projects]
+  desc "Sync the Notion media appearances database into MediaAppearance records"
+  task sync_media: :environment do
+    result = NotionMediaAppearancesSyncer.new.call
+
+    puts "Synced #{result.total} media appearances (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped)."
+  end
+
+  desc "Sync clients, projects, and media from Notion"
+  task sync: %i[sync_clients sync_projects sync_media]
 
   desc "Sync the Notion projects database into Project records"
   task sync_projects: :environment do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_190000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -54,6 +54,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_180000) do
     t.index ["client_group"], name: "index_clients_on_client_group"
     t.index ["notion_page_id"], name: "index_clients_on_notion_page_id", unique: true
     t.index ["slug"], name: "index_clients_on_slug", unique: true
+  end
+
+  create_table "media_appearances", force: :cascade do |t|
+    t.date "appearance_date"
+    t.boolean "archived", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "last_synced_at"
+    t.string "location"
+    t.string "name"
+    t.datetime "notion_created_at"
+    t.datetime "notion_last_edited_at"
+    t.string "notion_page_id", null: false
+    t.string "notion_url"
+    t.string "organizer"
+    t.integer "project_id"
+    t.string "slug"
+    t.text "topic"
+    t.datetime "updated_at", null: false
+    t.index ["appearance_date"], name: "index_media_appearances_on_appearance_date"
+    t.index ["notion_page_id"], name: "index_media_appearances_on_notion_page_id", unique: true
+    t.index ["project_id"], name: "index_media_appearances_on_project_id"
+    t.index ["slug"], name: "index_media_appearances_on_slug", unique: true
   end
 
   create_table "projects", force: :cascade do |t|
@@ -105,6 +127,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_180000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "media_appearances", "projects"
   add_foreign_key "projects", "clients"
   add_foreign_key "sessions", "users"
 end

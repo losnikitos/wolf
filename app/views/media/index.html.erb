@@ -1,0 +1,23 @@
+<% content_for :title, "Media" %>
+
+<div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-5 pb-16 pt-10 sm:px-8">
+  <header class="flex flex-col gap-1">
+    <h1 class="text-3xl font-semibold tracking-tight text-zinc-900">Media</h1>
+    <p class="text-sm text-zinc-500">Synced from Notion · appearances and talks</p>
+  </header>
+
+  <% if @appearances_by_year.any? %>
+    <% @year_names.each do |year_name| %>
+      <% appearances = @appearances_by_year[year_name] %>
+      <section class="flex flex-col gap-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400"><%= year_name %></h2>
+        <%= render "list", media_appearances: appearances %>
+      </section>
+    <% end %>
+  <% else %>
+    <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center">
+      <p class="text-zinc-600">No media appearances yet.</p>
+      <p class="mt-2 text-sm text-zinc-500">Run a Notion sync to populate this list.</p>
+    </div>
+  <% end %>
+</div>

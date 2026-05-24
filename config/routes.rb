@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   get "clients/:slug", to: "clients#show", as: :client
   get "clients/:client_slug/:project_slug", to: "projects#show", as: :client_project
 
+  resources :media, only: %i[index show], param: :slug
+
   resources :projects, only: %i[index show], param: :slug do
     collection do
       get ":kind/:tag",
