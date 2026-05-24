@@ -32,6 +32,8 @@ module Notion
         Date.parse(start_on) if start_on.present?
       when :relation
         Array(property["relation"]).filter_map { |item| item["id"] }
+      when :url
+        property["url"].presence
       end
     end
 

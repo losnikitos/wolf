@@ -24,13 +24,17 @@
       <%= render "shared/notion_actions", record: @media_appearance %>
     </div>
 
-    <% meta_bits = [@media_appearance.organizer, @media_appearance.location].compact %>
-    <% if meta_bits.any? %>
-      <p class="text-base text-zinc-600"><%= meta_bits.join(" · ") %></p>
-    <% end %>
-
-    <% if @media_appearance.topic.present? %>
-      <p class="text-base leading-relaxed text-zinc-700"><%= @media_appearance.topic %></p>
+    <% if @media_appearance.url.present? %>
+      <% link_label = @media_appearance.publication.present? ? t("media.read_on_publication", publication: @media_appearance.publication) : @media_appearance.url %>
+      <p>
+        <%= link_to link_label,
+              @media_appearance.url,
+              class: "text-sm font-medium text-zinc-600 underline decoration-zinc-300 underline-offset-2 transition hover:text-zinc-900",
+              target: "_blank",
+              rel: "noopener noreferrer" %>
+      </p>
+    <% elsif @media_appearance.publication.present? %>
+      <p class="text-base font-medium text-zinc-700"><%= @media_appearance.publication %></p>
     <% end %>
 
     <%= render "shared/notion_body", record: @media_appearance %>

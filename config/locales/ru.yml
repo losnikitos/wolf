@@ -9,7 +9,7 @@ ru:
   nav:
     clients: Клиенты
     projects: Проекты
-    media: Медиа
+    media: В медиа
     talks: Выступления
     reviews: Отзывы
     search: Поиск
@@ -60,11 +60,12 @@ ru:
     no_clients: Клиентов пока нет.
     no_projects: К этому клиенту пока не привязано проектов.
   media:
-    title: Публикации
+    title: В медиа
     nav_title: Медиа
     untitled: Публикация без названия
     page_title: Публикация
     no_appearances: Публикаций пока нет.
+    read_on_publication: Читать на %{publication}
   talks:
     title: Выступления
     untitled: Выступление без названия

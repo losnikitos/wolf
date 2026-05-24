@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_220000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_230000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -71,9 +71,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_220000) do
     t.string "organizer"
     t.datetime "page_content_last_synced_at"
     t.integer "project_id"
+    t.string "publication"
     t.string "slug"
     t.text "topic"
     t.datetime "updated_at", null: false
+    t.string "url"
     t.index ["appearance_date"], name: "index_media_appearances_on_appearance_date"
     t.index ["notion_page_id"], name: "index_media_appearances_on_notion_page_id", unique: true
     t.index ["project_id"], name: "index_media_appearances_on_project_id"

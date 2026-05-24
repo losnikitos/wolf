@@ -14,11 +14,8 @@
           <h2 class="mt-3 text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
             <%= appearance.name.presence || t("media.untitled") %>
           </h2>
-          <% if appearance.organizer.present? %>
-            <p class="mt-2 text-sm text-zinc-500"><%= appearance.organizer %></p>
-          <% end %>
-          <% if appearance.location.present? %>
-            <p class="mt-auto pt-3 text-xs text-zinc-400"><%= appearance.location %></p>
+          <% if appearance.publication.present? %>
+            <p class="mt-2 text-sm text-zinc-500"><%= appearance.publication %></p>
           <% end %>
         <% end %>
       </li>

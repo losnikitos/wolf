@@ -58,11 +58,12 @@ en:
     no_clients: No clients yet.
     no_projects: No projects linked to this client yet.
   media:
-    title: Publications
+    title: Media
     nav_title: Media
     untitled: Untitled appearance
     page_title: Media appearance
     no_appearances: No media appearances yet.
+    read_on_publication: Read on %{publication}
   talks:
     title: Talks
     untitled: Untitled talk

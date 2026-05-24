@@ -10,9 +10,11 @@ class Notion::PropertyExtractorTest < ActiveSupport::TestCase
     assert_equal "Active", @extractor.extract(select_property("Active"), :select)
   end
 
-  test "extracts rich text and date properties" do
+  test "extracts rich text, date, and url properties" do
     assert_equal "Topic", @extractor.extract(rich_text_property("Topic"), :rich_text)
     assert_equal Date.new(2017, 12, 7), @extractor.extract(date_property("2017-12-07"), :date)
+    assert_equal "https://example.com/article", @extractor.extract(url_property("https://example.com/article"), :url)
+    assert_nil @extractor.extract(url_property(nil), :url)
   end
 
   test "extracts project-specific property types" do
@@ -73,6 +75,10 @@ class Notion::PropertyExtractorTest < ActiveSupport::TestCase
 
   def relation_property(ids)
     { "relation" => ids.map { |id| { "id" => id } } }
+  end
+
+  def url_property(url)
+    { "url" => url }
   end
 
   def file_property(url)
