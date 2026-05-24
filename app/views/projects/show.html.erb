@@ -19,8 +19,8 @@ end %>
 
   <% if @project.cover_for_display? %>
     <div class="overflow-hidden rounded-2xl">
-      <%= render "projects/cover",
-            project: @project,
+      <%= render "shared/cover",
+            record: @project,
             aspect_class: "aspect-[21/9]",
             media_class: "h-full w-full object-cover" %>
     </div>

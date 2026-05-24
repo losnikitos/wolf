@@ -7,8 +7,8 @@
         <%= link_to project_path_for(project, client: local_assigns[:client]), data: { turbo_frame: "_top" }, class: "group block h-full rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
           <article class="flex h-full flex-col overflow-hidden rounded-2xl">
             <div class="relative overflow-hidden">
-              <%= render "projects/cover",
-                    project: project,
+              <%= render "shared/cover",
+                    record: project,
                     media_class: "h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" %>
               <% if project.favorite? %>
                 <span class="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-amber-400/95 text-amber-950 shadow-sm backdrop-blur-sm" title="<%= t("shared.favorite") %>">

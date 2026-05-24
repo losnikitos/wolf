@@ -1,5 +1,5 @@
-<%# locals: (project:, aspect_class: "aspect-[16/10]", media_class: "h-full w-full object-cover") %>
-<% cover_attachment = project.cover_for_display %>
+<%# locals: (record:, aspect_class: "aspect-[16/10]", media_class: "h-full w-full object-cover") %>
+<% cover_attachment = record.cover_for_display %>
 <% if cover_attachment %>
   <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
     <% if cover_attachment.image? %>
@@ -14,12 +14,12 @@
             class: media_class %>
     <% end %>
   </div>
-<% elsif project.cover_url.present? %>
+<% elsif record.respond_to?(:cover_url) && record.cover_url.present? %>
   <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
-    <%= image_tag project.cover_url, alt: "", class: media_class %>
+    <%= image_tag record.cover_url, alt: "", class: media_class %>
   </div>
 <% else %>
   <div class="<%= aspect_class %> flex items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200">
-    <span class="text-4xl font-medium text-zinc-300"><%= (project.name&.first || "?").upcase %></span>
+    <span class="text-4xl font-medium text-zinc-300"><%= (record.name&.first || "?").upcase %></span>
   </div>
 <% end %>

@@ -23,4 +23,44 @@ module NotionPageContent
   def page_content_never_synced?
     page_content_last_synced_at.nil?
   end
+
+  def cover_for_display
+    return cover if respond_to?(:cover) && cover.attached?
+    return if respond_to?(:cover_url) && cover_url.present?
+
+    first_body_media
+  end
+
+  def cover_for_display?
+    (respond_to?(:cover) && cover.attached?) ||
+      (respond_to?(:cover_url) && cover_url.present?) ||
+      first_body_media.present?
+  end
+
+  def first_body_media
+    find_first_body_media(body)
+  end
+
+  private
+
+  def find_first_body_media(blocks)
+    Array(blocks).each do |block|
+      type = block["type"]
+
+      if NotionBodyParser::MEDIA_BLOCK_TYPES.include?(type)
+        attachment = media_for_block(block["id"])
+        return attachment if attachment&.image? || attachment&.video?
+      elsif type == "column_list"
+        Array(block["columns"]).each do |column|
+          found = find_first_body_media(column["children"])
+          return found if found
+        end
+      elsif block["children"].present?
+        found = find_first_body_media(block["children"])
+        return found if found
+      end
+    end
+
+    nil
+  end
 end

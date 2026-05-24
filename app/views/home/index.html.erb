@@ -22,8 +22,8 @@
         <% @favorite_projects.each_with_index do |project, i| %>
           <%= link_to project_path(project), class: ["group block overflow-hidden rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2", ("lg:col-span-2" if i.zero?)] do %>
             <div class="relative aspect-[4/5] overflow-hidden bg-zinc-100 sm:aspect-[3/4] <%= "lg:aspect-[16/10]" if i.zero? %>">
-              <%= render "projects/cover",
-                    project: project,
+              <%= render "shared/cover",
+                    record: project,
                     aspect_class: "absolute inset-0 h-full w-full",
                     media_class: "h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" %>
               <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/70 via-zinc-950/20 to-transparent" aria-hidden="true"></div>
