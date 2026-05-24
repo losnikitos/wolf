@@ -77,7 +77,7 @@ class NotionProjectsSyncer
   def needs_sync?(project, page)
     return true if project.new_record? || project.last_synced_at.nil?
     return true if project.media.none?
-    return true if project.body.nil?
+    return true if project.body.blank?
 
     edited_at = parse_time(page.last_edited_time)
     edited_at.nil? || edited_at > project.last_synced_at

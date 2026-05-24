@@ -146,6 +146,9 @@ GEM
       activesupport (>= 6.1)
     hashie (5.1.0)
       logger
+    heroicons (2.2.0)
+      nokogiri
+      railties (>= 5.2)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     image_processing (1.14.0)
@@ -442,6 +445,7 @@ DEPENDENCIES
   capybara
   debug
   friendly_id (~> 5.7)
+  heroicons
   image_processing (~> 1.2)
   importmap-rails
   jbuilder

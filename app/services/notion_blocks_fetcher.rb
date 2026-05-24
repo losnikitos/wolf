@@ -14,9 +14,11 @@ class NotionBlocksFetcher
   private
 
   def fetch_children(block_id)
+    blocks = []
     @client.block_children(block_id: block_id, page_size: 100) do |response|
-      response.results.map { |block| normalize(block) }
+      response.results.each { |block| blocks << normalize(block) }
     end
+    blocks
   rescue StandardError
     []
   end

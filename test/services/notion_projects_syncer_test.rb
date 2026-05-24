@@ -58,6 +58,7 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
       content_type: "image/png",
       metadata: { notion_block_id: "block-placeholder", notion_url: "https://files.notion/placeholder.png" }
     )
+    project.update!(body: [ { "type" => "paragraph", "id" => "synced", "rich_text" => [ { "text" => "Synced" } ] } ])
     first_sync = project.reload.last_synced_at
 
     travel 1.minute do
@@ -102,6 +103,44 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
 
     assert_equal 1, result.updated
     assert_equal Time.zone.parse("2026-05-13T12:00:00.000Z"), Project.last.notion_last_edited_at
+  end
+
+  test "backfills body when project has empty body despite prior sync" do
+    edited_at = Time.zone.parse("2018-06-02T12:00:00.000Z")
+    blocks = [
+      {
+        "id" => "p-1",
+        "type" => "paragraph",
+        "paragraph" => { "rich_text" => [ { "plain_text" => "Backfilled", "annotations" => {} } ] },
+        "children" => []
+      }
+    ]
+    project = Project.create!(
+      notion_page_id: "page-1",
+      name: "Existing",
+      body: [],
+      last_synced_at: 1.hour.ago,
+      notion_last_edited_at: edited_at
+    )
+    project.media.attach(
+      io: StringIO.new("synced"),
+      filename: "placeholder.png",
+      content_type: "image/png",
+      metadata: { notion_block_id: "block-placeholder", notion_url: "https://files.notion/placeholder.png" }
+    )
+    client = FakeNotionClient.new([ notion_page(last_edited_time: edited_at.iso8601) ], blocks: blocks)
+
+    with_stubbed_media_sync do |media_attacher, block_collector|
+      result = NotionProjectsSyncer.new(
+        client: client,
+        media_attacher: media_attacher,
+        block_media_collector: block_collector,
+        progress_logger: ->(_) {}
+      ).call
+
+      assert_equal 0, result.skipped
+      assert_equal "Backfilled", Project.find_by!(notion_page_id: "page-1").body.first["rich_text"].first["text"]
+    end
   end
 
   test "backfills media when project has no attachments despite prior sync" do

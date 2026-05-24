@@ -74,3 +74,5 @@ gem "authentication-zero", "~> 4.0"
 gem "friendly_id", "~> 5.7"
 
 gem "babosa", "~> 2.1"
+
+gem "heroicons"

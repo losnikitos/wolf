@@ -30,6 +30,21 @@ class Project < ApplicationRecord
   scope :favorites, -> { where(favorite: true) }
   scope :active, -> { where(archived: false) }
 
+  SEARCHABLE_COLUMNS = %w[name client city project_type status].freeze
+
+  scope :matching_phrase, ->(phrase) {
+    phrase = phrase.to_s.strip
+    next all if phrase.blank?
+
+    pattern = "%#{sanitize_sql_like(phrase.downcase)}%"
+    text_match = SEARCHABLE_COLUMNS
+      .map { |column| "LOWER(#{connection.quote_column_name(column)}) LIKE ?" }
+      .join(" OR ")
+    year_match = "CAST(#{connection.quote_column_name("year")} AS TEXT) LIKE ?"
+
+    where("(#{text_match}) OR #{year_match}", *([ pattern ] * (SEARCHABLE_COLUMNS.size + 1)))
+  }
+
   def slug_candidates
     [ :name, :notion_page_id ]
   end

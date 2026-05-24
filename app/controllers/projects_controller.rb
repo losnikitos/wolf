@@ -1,6 +1,9 @@
 class ProjectsController < ApplicationController
   def index
-    @projects = Project.active.order(year: :desc, name: :asc)
+    @query = params[:q].to_s.strip
+    @projects = Project.active
+    @projects = @projects.matching_phrase(@query) if @query.present?
+    @projects = @projects.order(year: :desc, name: :asc)
   end
 
   def show
