@@ -3,11 +3,8 @@
     <% if I18n.locale == locale %>
       <span class="rounded-full bg-zinc-900 px-2.5 py-1 text-white" aria-current="true"><%= locale.to_s.upcase %></span>
     <% else %>
-      <%= button_to locale.to_s.upcase,
-            locale_path,
-            method: :patch,
-            params: { locale: locale },
-            form: { class: "inline" },
+      <%= link_to locale.to_s.upcase,
+            locale_switch_path(locale),
             class: "rounded-full px-2.5 py-1 text-zinc-500 transition hover:text-zinc-900",
             aria: { label: t("locale.switch_#{locale}") } %>
     <% end %>

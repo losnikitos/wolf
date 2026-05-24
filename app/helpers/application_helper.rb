@@ -33,4 +33,17 @@ module ApplicationHelper
   def localized_year_label(year)
     year == "Unknown" ? t("shared.unknown") : year
   end
+
+  def locale_switch_path(locale)
+    query = request.query_parameters.deep_dup
+
+    if locale.to_sym == :en
+      query["lang"] = "en"
+    else
+      query.delete("lang")
+    end
+
+    query_string = query.to_query
+    query_string.present? ? "#{request.path}?#{query_string}" : request.path
+  end
 end

@@ -23,8 +23,6 @@ Rails.application.routes.draw do
 
   root "home#index"
 
-  resource :locale, only: :update
-
   get "search", to: "search#index"
 
   post "notion/sync/:record_type/:slug", to: "notion_syncs#create", as: :notion_sync,
