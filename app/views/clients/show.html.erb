@@ -4,7 +4,7 @@
   <%= render "shared/page_header",
         title: @client.name,
         breadcrumbs: [
-          { label: "Clients", path: clients_path },
+          { label: t("clients.title"), path: clients_path },
           { label: @client.name, current: true }
         ] %>
 
@@ -15,5 +15,5 @@
   <%= render "projects/list",
         projects: @projects,
         client: @client,
-        empty_message: "No projects linked to this client yet." %>
+        empty_message: t("clients.no_projects") %>
 </div>

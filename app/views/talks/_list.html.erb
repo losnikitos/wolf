@@ -12,7 +12,7 @@
             <% end %>
           </div>
           <h2 class="mt-3 text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
-            <%= talk.name.presence || "Untitled talk" %>
+            <%= talk.name.presence || t("talks.untitled") %>
           </h2>
           <% if talk.organizer.present? %>
             <p class="mt-2 text-sm text-zinc-500"><%= talk.organizer %></p>

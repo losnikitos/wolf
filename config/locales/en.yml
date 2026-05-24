@@ -1,6 +1,6 @@
 en:
   site:
-    name: Evgeniy Volk
+    name: Eugene Wolf
     app_name: Wolf
   locale:
     label: Language
@@ -14,7 +14,7 @@ en:
     reviews: Reviews
     search: Search
   footer:
-    copyright: "© 2023 — Evgeniy Volk"
+    copyright: "© 2023 — Eugene Wolf"
     social: Social media
     telegram: Telegram
     telegram_channel: Telegram channel

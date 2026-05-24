@@ -4,12 +4,12 @@
   <%= render "shared/page_header",
         title: project_collection_title(@kind, @tag),
         breadcrumbs: [
-          { label: "Projects", path: projects_path },
+          { label: t("projects.title"), path: projects_path },
           { label: project_tag_kind_label(@kind) },
           { label: @tag, current: true }
         ] %>
 
   <%= render "list",
         projects: @projects,
-        empty_message: "No active projects tagged with “#{h(@tag)}”." %>
+        empty_message: t("projects.no_tagged_projects", tag: h(@tag)) %>
 </div>
