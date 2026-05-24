@@ -9,7 +9,9 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
   test "creates projects from a Notion database" do
     client = FakeNotionClient.new([ notion_page ])
 
-    result = NotionProjectsSyncer.new(client: client).call
+    result = with_stubbed_cover_download do |media_attacher|
+      NotionProjectsSyncer.new(client: client, media_attacher: media_attacher).call
+    end
 
     assert_equal 1, result.created
     assert_equal 0, result.updated
@@ -34,13 +36,16 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
 
   test "re-syncing the same data reports unchanged but refreshes last_synced_at" do
     client = FakeNotionClient.new([ notion_page ])
-    syncer = NotionProjectsSyncer.new(client: client)
 
-    syncer.call
+    with_stubbed_cover_download do |media_attacher|
+      NotionProjectsSyncer.new(client: client, media_attacher: media_attacher).call
+    end
     first_sync = Project.last.last_synced_at
 
     travel 1.minute do
-      result = syncer.call
+      result = with_stubbed_cover_download do |media_attacher|
+        NotionProjectsSyncer.new(client: client, media_attacher: media_attacher).call
+      end
       assert_equal 0, result.created
       assert_equal 0, result.updated
       assert_equal 1, result.unchanged
@@ -50,11 +55,15 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
 
   test "detects updates when Notion values change" do
     client = FakeNotionClient.new([ notion_page ])
-    NotionProjectsSyncer.new(client: client).call
+    with_stubbed_cover_download do |media_attacher|
+      NotionProjectsSyncer.new(client: client, media_attacher: media_attacher).call
+    end
 
     updated_client = FakeNotionClient.new([ notion_page(status: "В работе") ])
 
-    result = NotionProjectsSyncer.new(client: updated_client).call
+    result = with_stubbed_cover_download do |media_attacher|
+      NotionProjectsSyncer.new(client: updated_client, media_attacher: media_attacher).call
+    end
 
     assert_equal 1, result.updated
     assert_equal "В работе", Project.find_by(notion_page_id: "page-1").status
@@ -73,7 +82,9 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
     )
     client = FakeNotionClient.new([ bare ])
 
-    NotionProjectsSyncer.new(client: client).call
+    with_stubbed_cover_download do |media_attacher|
+      NotionProjectsSyncer.new(client: client, media_attacher: media_attacher).call
+    end
 
     project = Project.find_by!(notion_page_id: "page-2")
     assert_equal "Empty", project.name
@@ -84,6 +95,13 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
   end
 
   private
+
+  def with_stubbed_cover_download
+    null_attacher = Object.new
+    null_attacher.define_singleton_method(:attach_cover!) { |*| }
+
+    yield null_attacher
+  end
 
   def notion_page(status: "Успешно выполнен")
     OpenStruct.new(

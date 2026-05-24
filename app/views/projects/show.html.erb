@@ -8,10 +8,11 @@
   </nav>
 
   <article class="overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5">
-    <% if @project.cover_url.present? %>
-      <div class="aspect-[21/9] bg-zinc-100">
-        <%= image_tag @project.cover_url, alt: "", class: "h-full w-full object-cover" %>
-      </div>
+    <% if @project.cover.attached? || @project.cover_url.present? %>
+      <%= render "projects/cover",
+            project: @project,
+            aspect_class: "aspect-[21/9]",
+            media_class: "h-full w-full object-cover" %>
     <% end %>
 
     <div class="p-6 sm:p-8">

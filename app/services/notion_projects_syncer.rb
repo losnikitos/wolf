@@ -19,9 +19,10 @@ class NotionProjectsSyncer
     directions: { property: "Направление", type: :multi_select }
   }.freeze
 
-  def initialize(client: nil, database_id: Project::NOTION_DATABASE_ID)
+  def initialize(client: nil, database_id: Project::NOTION_DATABASE_ID, media_attacher: NotionMediaAttacher)
     @client = client || Notion::Client.new
     @database_id = database_id
+    @media_attacher = media_attacher
   end
 
   def call
@@ -47,6 +48,7 @@ class NotionProjectsSyncer
 
     project.last_synced_at = Time.current
     project.save!
+    @media_attacher.attach_cover!(project)
 
     return :created if was_new_record
     return :updated if content_changed

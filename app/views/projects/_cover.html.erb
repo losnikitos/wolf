@@ -1,0 +1,24 @@
+<%# locals: (project:, aspect_class: "aspect-[16/10]", media_class: "h-full w-full object-cover") %>
+<% if project.cover.attached? %>
+  <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
+    <% if project.cover.image? %>
+      <%= image_tag project.cover, alt: "", class: media_class %>
+    <% elsif project.cover.video? %>
+      <%= video_tag url_for(project.cover),
+            controls: false,
+            muted: true,
+            playsinline: true,
+            loop: true,
+            autoplay: true,
+            class: media_class %>
+    <% end %>
+  </div>
+<% elsif project.cover_url.present? %>
+  <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
+    <%= image_tag project.cover_url, alt: "", class: media_class %>
+  </div>
+<% else %>
+  <div class="<%= aspect_class %> flex items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200">
+    <span class="text-4xl font-medium text-zinc-300"><%= (project.name&.first || "?").upcase %></span>
+  </div>
+<% end %>
