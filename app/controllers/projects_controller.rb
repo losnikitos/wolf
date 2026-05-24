@@ -1,9 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @query = params[:q].to_s.strip
-    @projects = Project.active
-    @projects = @projects.matching_phrase(@query) if @query.present?
-    @projects = ordered_projects(@projects)
+    @projects = ordered_projects(Project.active)
   end
 
   def collection

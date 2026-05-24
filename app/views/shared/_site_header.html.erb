@@ -23,9 +23,18 @@
               "text-sm font-medium transition",
               request.path.start_with?("/media") ? "text-zinc-900" : "text-zinc-500 hover:text-zinc-900"
             ) %>
-      <%= link_to projects_path(anchor: "search"),
-            class: "inline-flex size-9 items-center justify-center rounded-full text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900",
-            aria: { label: "Search projects" } do %>
+      <%= link_to "Talks",
+            talks_path,
+            class: class_names(
+              "text-sm font-medium transition",
+              request.path.start_with?("/talks") ? "text-zinc-900" : "text-zinc-500 hover:text-zinc-900"
+            ) %>
+      <%= link_to search_path,
+            class: class_names(
+              "inline-flex size-9 items-center justify-center rounded-full transition",
+              current_page?(search_path) ? "bg-zinc-100 text-zinc-900" : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+            ),
+            aria: { label: "Search" } do %>
         <%= heroicon "magnifying-glass", variant: :outline, options: { class: "size-5", aria_hidden: "true" } %>
       <% end %>
     </nav>

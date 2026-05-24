@@ -1,4 +1,5 @@
 class Talk < ApplicationRecord
+  include NameSearchable
   include NotionPageContent
 
   extend FriendlyId

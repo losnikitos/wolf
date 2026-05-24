@@ -44,11 +44,6 @@
       </li>
     <% end %>
   </ul>
-<% elsif query.present? %>
-  <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center">
-    <p class="text-zinc-600">No projects match “<%= h(query) %>”.</p>
-    <p class="mt-2 text-sm text-zinc-500">Try a different phrase.</p>
-  </div>
 <% elsif local_assigns[:empty_message].present? %>
   <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center">
     <p class="text-zinc-600"><%= empty_message %></p>

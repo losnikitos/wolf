@@ -1,4 +1,5 @@
 class MediaAppearance < ApplicationRecord
+  include NameSearchable
   include NotionPageContent
 
   extend FriendlyId

@@ -1,4 +1,6 @@
 class Client < ApplicationRecord
+  include NameSearchable
+
   extend FriendlyId
 
   friendly_id :name, use: :slugged

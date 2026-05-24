@@ -1,4 +1,5 @@
 class Project < ApplicationRecord
+  include NameSearchable
   include NotionPageContent
 
   extend FriendlyId

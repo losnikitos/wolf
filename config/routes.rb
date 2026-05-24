@@ -23,11 +23,14 @@ Rails.application.routes.draw do
 
   root "home#index"
 
+  get "search", to: "search#index"
+
   resources :clients, only: %i[index]
   get "clients/:slug", to: "clients#show", as: :client
   get "clients/:client_slug/:project_slug", to: "projects#show", as: :client_project
 
   resources :media, only: %i[index show], param: :slug
+  resources :talks, only: %i[index show], param: :slug
 
   resources :projects, only: %i[index show], param: :slug do
     collection do
