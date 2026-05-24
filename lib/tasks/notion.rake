@@ -14,8 +14,18 @@ namespace :notion do
     puts "Synced #{result.total} media appearances (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped)."
   end
 
-  desc "Sync clients, projects, and media from Notion"
-  task sync: %i[sync_clients sync_projects sync_media]
+  desc "Sync the Notion public talks database into Talk records"
+  task sync_talks: :environment do
+    force = ENV["FORCE"] == "1"
+    result = NotionTalksSyncer.new(force: force).call
+
+    removed = result.removed_from_media
+    removed_message = removed.positive? ? ", #{removed} removed from media" : ""
+    puts "Synced #{result.total} talks (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped#{removed_message})."
+  end
+
+  desc "Sync clients, projects, media, and talks from Notion"
+  task sync: %i[sync_clients sync_projects sync_media sync_talks]
 
   desc "Sync the Notion projects database into Project records"
   task sync_projects: :environment do
@@ -32,6 +42,16 @@ namespace :notion do
     result = NotionProjectsSyncer.new(force: true).call(notion_page_id: notion_page_id)
 
     puts "Synced 1 project (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged)."
+  end
+
+  desc "Force-sync one Notion talk by page ID (ignores last-edited cache)"
+  task :sync_talk, [ :notion_page_id ] => :environment do |_task, args|
+    notion_page_id = args[:notion_page_id].presence || ENV["NOTION_PAGE_ID"]
+    abort "Usage: bin/rails 'notion:sync_talk[NOTION_PAGE_ID]' (or NOTION_PAGE_ID=... bin/rails notion:sync_talk)" unless notion_page_id
+
+    result = NotionTalksSyncer.new(force: true).call(notion_page_id: notion_page_id)
+
+    puts "Synced 1 talk (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped)."
   end
 
   desc "Force-sync one Notion media appearance by page ID (ignores last-edited cache)"

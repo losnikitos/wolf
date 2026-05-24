@@ -7,6 +7,7 @@ class Project < ApplicationRecord
 
   belongs_to :client, optional: true
   has_many :media_appearances, dependent: :nullify
+  has_many :talks, dependent: :nullify
 
   NOTION_DATABASE_ID = "16e875f5-4593-80dc-8566-f871610e6bdf".freeze
 

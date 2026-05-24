@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_200000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_210000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -119,6 +119,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_200000) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "talks", force: :cascade do |t|
+    t.boolean "archived", default: false, null: false
+    t.json "body", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "last_synced_at"
+    t.string "location"
+    t.string "name"
+    t.datetime "notion_created_at"
+    t.datetime "notion_last_edited_at"
+    t.string "notion_page_id", null: false
+    t.string "notion_url"
+    t.string "organizer"
+    t.datetime "page_content_last_synced_at"
+    t.integer "project_id"
+    t.string "slug"
+    t.date "talk_date"
+    t.text "topic"
+    t.datetime "updated_at", null: false
+    t.index ["notion_page_id"], name: "index_talks_on_notion_page_id", unique: true
+    t.index ["project_id"], name: "index_talks_on_project_id"
+    t.index ["slug"], name: "index_talks_on_slug", unique: true
+    t.index ["talk_date"], name: "index_talks_on_talk_date"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", null: false
@@ -133,4 +157,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_200000) do
   add_foreign_key "media_appearances", "projects"
   add_foreign_key "projects", "clients"
   add_foreign_key "sessions", "users"
+  add_foreign_key "talks", "projects"
 end
