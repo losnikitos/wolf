@@ -36,13 +36,16 @@ class Project < ApplicationRecord
     phrase = phrase.to_s.strip
     next all if phrase.blank?
 
-    pattern = "%#{sanitize_sql_like(phrase.downcase)}%"
-    text_match = SEARCHABLE_COLUMNS
-      .map { |column| "LOWER(#{connection.quote_column_name(column)}) LIKE ?" }
-      .join(" OR ")
-    year_match = "CAST(#{connection.quote_column_name("year")} AS TEXT) LIKE ?"
+    # SQLite only case-folds ASCII (LOWER / COLLATE NOCASE). Match in Ruby so
+    # Cyrillic and other scripts are case-insensitive too.
+    needle = phrase.downcase
+    columns = [ :id, *SEARCHABLE_COLUMNS.map(&:to_sym), :year ]
+    matching_ids = unscope(:order).pluck(*columns).filter_map do |row|
+      id, *values = row
+      id if values.any? { |value| value.to_s.downcase.include?(needle) }
+    end
 
-    where("(#{text_match}) OR #{year_match}", *([ pattern ] * (SEARCHABLE_COLUMNS.size + 1)))
+    where(id: matching_ids)
   }
 
   def slug_candidates

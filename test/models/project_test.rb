@@ -15,6 +15,15 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 0, Project.matching_phrase("alpha beta").count
   end
 
+  test "matching_phrase matches cyrillic substring" do
+    create_project!(name: "Вторая версия онлайн-сервиса TADAAA!")
+
+    assert_equal 1, Project.matching_phrase("Вторая").count
+    assert_equal 1, Project.matching_phrase("вторая").count
+    assert_equal 1, Project.matching_phrase("онлайн").count
+    assert_equal 0, Project.matching_phrase("несуществующий").count
+  end
+
   test "matching_phrase returns all projects when phrase is blank" do
     create_project!(name: "One")
     create_project!(name: "Two")
