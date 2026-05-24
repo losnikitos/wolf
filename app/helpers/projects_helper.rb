@@ -26,6 +26,6 @@ module ProjectsHelper
   end
 
   def project_tag_link_class
-    "rounded-lg bg-zinc-50 px-3 py-1.5 text-sm text-zinc-700 ring-1 ring-inset ring-zinc-200/80 transition hover:bg-zinc-100 hover:text-zinc-900"
+    "inline-flex rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200 hover:text-zinc-800"
   end
 end

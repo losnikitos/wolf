@@ -25,6 +25,9 @@ Rails.application.routes.draw do
 
   get "search", to: "search#index"
 
+  post "notion/sync/:record_type/:slug", to: "notion_syncs#create", as: :notion_sync,
+    constraints: { record_type: /projects|talks|reviews|media/ }
+
   resources :clients, only: %i[index]
   get "clients/:slug", to: "clients#show", as: :client
   get "clients/:client_slug/:project_slug", to: "projects#show", as: :client_project

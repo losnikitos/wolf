@@ -1,0 +1,24 @@
+<%# locals: record (Notion-synced model with notion_page_id) %>
+<% if record.notion_page_id.present? %>
+  <div class="flex items-center gap-0.5">
+    <% if record.notion_url.present? %>
+      <%= link_to record.notion_url,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            class: notion_action_icon_class,
+            title: "Open in Notion",
+            aria: { label: "Open in Notion" } do %>
+        <%= heroicon "arrow-top-right-on-square", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
+      <% end %>
+    <% end %>
+
+    <%= button_to notion_sync_path_for(record),
+          method: :post,
+          form: { class: "inline-flex" },
+          class: notion_action_icon_class,
+          title: "Sync from Notion",
+          aria: { label: "Sync from Notion" } do %>
+      <%= heroicon "arrow-path", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
+    <% end %>
+  </div>
+<% end %>
