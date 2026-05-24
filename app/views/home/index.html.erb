@@ -28,8 +28,8 @@
                 <span class="mt-1 text-sm font-medium text-white sm:text-base">
                   <%= project.name.presence || "Untitled project" %>
                 </span>
-                <% if project.client.present? %>
-                  <span class="mt-0.5 text-sm text-zinc-300"><%= project.client %></span>
+                <% if project.client&.name.present? %>
+                  <span class="mt-0.5 text-sm text-zinc-300"><%= project.client.name %></span>
                 <% end %>
               </div>
             </div>

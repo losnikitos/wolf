@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_150716) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_180000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -39,11 +39,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_150716) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "clients", force: :cascade do |t|
+    t.boolean "archived", default: false, null: false
+    t.string "client_group"
+    t.datetime "created_at", null: false
+    t.datetime "last_synced_at"
+    t.string "name"
+    t.datetime "notion_created_at"
+    t.datetime "notion_last_edited_at"
+    t.string "notion_page_id", null: false
+    t.string "notion_url"
+    t.string "slug"
+    t.datetime "updated_at", null: false
+    t.index ["client_group"], name: "index_clients_on_client_group"
+    t.index ["notion_page_id"], name: "index_clients_on_notion_page_id", unique: true
+    t.index ["slug"], name: "index_clients_on_slug", unique: true
+  end
+
   create_table "projects", force: :cascade do |t|
     t.boolean "archived", default: false, null: false
     t.json "body", default: [], null: false
     t.string "city"
-    t.string "client"
+    t.integer "client_id"
     t.string "cover_url"
     t.datetime "created_at", null: false
     t.json "deliverables", default: [], null: false
@@ -61,6 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_150716) do
     t.string "status"
     t.datetime "updated_at", null: false
     t.integer "year"
+    t.index ["client_id"], name: "index_projects_on_client_id"
     t.index ["notion_page_id"], name: "index_projects_on_notion_page_id", unique: true
     t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["status"], name: "index_projects_on_status"
@@ -87,5 +105,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_150716) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "projects", "clients"
   add_foreign_key "sessions", "users"
 end

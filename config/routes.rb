@@ -23,6 +23,9 @@ Rails.application.routes.draw do
 
   root "home#index"
 
+  resources :clients, only: %i[index]
+  get "clients/:slug", to: "clients#show", as: :client
+
   resources :projects, only: %i[index] do
     collection do
       get ":kind/:tag",

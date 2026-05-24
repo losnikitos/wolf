@@ -30,8 +30,8 @@
               <h2 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
                 <%= project.name.presence || "Untitled project" %>
               </h2>
-              <% if project.client.present? %>
-                <p class="text-sm text-zinc-500"><%= project.client %></p>
+              <% if project.client&.name.present? %>
+                <p class="text-sm text-zinc-500"><%= project.client.name %></p>
               <% end %>
               <% if project.city.present? || project.project_type.present? %>
                 <p class="mt-auto text-xs text-zinc-400">

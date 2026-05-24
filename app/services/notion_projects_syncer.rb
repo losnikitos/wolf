@@ -7,7 +7,6 @@ class NotionProjectsSyncer
 
   PROPERTY_MAP = {
     name: { property: "Проект", type: :title },
-    client: { property: "Клиент", type: :select },
     status: { property: "Статус", type: :status },
     project_type: { property: "Проекты", type: :select },
     city: { property: "Город", type: :select },
@@ -66,6 +65,7 @@ class NotionProjectsSyncer
     was_new_record = project.new_record?
 
     project.assign_attributes(attributes_for(page))
+    assign_client!(project, page)
     content_changed = project.changed?
 
     project.last_synced_at = Time.current
@@ -137,7 +137,16 @@ class NotionProjectsSyncer
       file = Array(property["files"]).first
       inner = file && file[file["type"]]
       inner && inner["url"]
+    when :relation
+      Array(property["relation"]).filter_map { |item| item["id"] }
     end
+  end
+
+  def assign_client!(project, page)
+    property = page.properties["Client"]
+    page_ids = extract(property, :relation)
+    client = page_ids.present? ? Client.find_by(notion_page_id: page_ids.first) : nil
+    project.client = client
   end
 
   def default_for(type)

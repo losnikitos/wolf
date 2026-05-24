@@ -1,4 +1,14 @@
 namespace :notion do
+  desc "Sync the Notion clients database into Client records"
+  task sync_clients: :environment do
+    result = NotionClientsSyncer.new.call
+
+    puts "Synced #{result.total} clients (#{result.created} created, #{result.updated} updated, #{result.unchanged} unchanged, #{result.skipped} skipped)."
+  end
+
+  desc "Sync clients and projects from Notion"
+  task sync: %i[sync_clients sync_projects]
+
   desc "Sync the Notion projects database into Project records"
   task sync_projects: :environment do
     result = NotionProjectsSyncer.new.call

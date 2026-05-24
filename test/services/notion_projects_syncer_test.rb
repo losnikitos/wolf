@@ -4,6 +4,11 @@ require "ostruct"
 class NotionProjectsSyncerTest < ActiveSupport::TestCase
   setup do
     Project.delete_all
+    Client.delete_all
+    @notion_client = Client.create!(
+      notion_page_id: "client-page-1",
+      name: "Все для видеоигр"
+    )
   end
 
   test "creates projects from a Notion database" do
@@ -25,7 +30,7 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
 
     project = Project.find_by!(notion_page_id: "page-1")
     assert_equal "Открытие магазина", project.name
-    assert_equal "Все для видеоигр", project.client
+    assert_equal @notion_client, project.client
     assert_equal "Успешно выполнен", project.status
     assert_equal "По заказу", project.project_type
     assert_equal "Ижевск", project.city
@@ -235,7 +240,7 @@ class NotionProjectsSyncerTest < ActiveSupport::TestCase
       last_edited_time: last_edited_time,
       properties: {
         "Проект" => { "type" => "title", "title" => [ { "plain_text" => "Открытие магазина" } ] },
-        "Клиент" => { "type" => "select", "select" => { "name" => "Все для видеоигр" } },
+        "Client" => { "type" => "relation", "relation" => [ { "id" => "client-page-1" } ] },
         "Статус" => { "type" => "status", "status" => { "name" => status } },
         "Проекты" => { "type" => "select", "select" => { "name" => "По заказу" } },
         "Город" => { "type" => "select", "select" => { "name" => "Ижевск" } },

@@ -6,8 +6,10 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "matching_phrase is case insensitive and matches exact substring" do
-    create_project!(name: "Alpha Store", client: "Acme Corp", city: "Moscow")
-    create_project!(name: "Beta Launch", client: "Other LLC", city: "Berlin")
+    acme = Client.create!(notion_page_id: SecureRandom.uuid, name: "Acme Corp")
+    other = Client.create!(notion_page_id: SecureRandom.uuid, name: "Other LLC")
+    create_project!(name: "Alpha Store", client: acme, city: "Moscow")
+    create_project!(name: "Beta Launch", client: other, city: "Berlin")
 
     assert_equal 1, Project.matching_phrase("alpha").count
     assert_equal 1, Project.matching_phrase("ALPHA").count
