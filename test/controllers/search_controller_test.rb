@@ -30,12 +30,18 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "Beta Client"
   end
 
+  test "index renders search page in english" do
+    get search_url, params: { lang: "en" }
+    assert_response :success
+    assert_select "h1", "Search"
+  end
+
   test "index shows empty state when there are no matches" do
     create_project!(name: "Only Project")
 
     get search_url, params: { q: "missing" }
     assert_response :success
-    assert_match(/No matches/, response.body)
+    assert_includes response.body, I18n.t("search.no_matches", query: "missing")
   end
 
   private
