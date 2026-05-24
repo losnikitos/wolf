@@ -1,15 +1,16 @@
 <% content_for :title, @client.name %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
-  <header class="flex flex-col gap-2">
-    <%= link_to "← Clients", clients_path, class: "text-sm font-medium text-zinc-500 transition hover:text-zinc-900" %>
-    <div class="flex flex-wrap items-center gap-3">
-      <% if @client.client_group.present? %>
-        <span class="inline-flex rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600"><%= @client.client_group %></span>
-      <% end %>
-    </div>
-    <h1 class="text-3xl font-semibold tracking-tight text-zinc-900"><%= @client.name %></h1>
-  </header>
+  <%= render "shared/page_header",
+        title: @client.name,
+        breadcrumbs: [
+          { label: "Clients", path: clients_path },
+          { label: @client.name, current: true }
+        ] %>
+
+  <% if @client.client_group.present? %>
+    <span class="inline-flex w-fit rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600"><%= @client.client_group %></span>
+  <% end %>
 
   <%= render "projects/list",
         projects: @projects,

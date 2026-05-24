@@ -1,112 +1,110 @@
 <% content_for :title, @project.name.presence || "Project" %>
-
+<% project_title = @project.name.presence || "Untitled project" %>
+<% project_breadcrumbs = if @client
+  [
+    { label: "Clients", path: clients_path },
+    { label: @client.name, path: client_path(@client) },
+    { label: project_title, current: true }
+  ]
+else
+  [
+    { label: "Projects", path: projects_path },
+    { label: project_title, current: true }
+  ]
+end %>
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
-  <nav class="text-sm" aria-label="Breadcrumb">
-    <% if @client %>
-      <%= link_to "Clients", clients_path, class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
-      <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
-      <%= link_to @client.name, client_path(@client), class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
-      <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
-      <span class="text-zinc-900" aria-current="page"><%= @project.name.presence || "Untitled" %></span>
-    <% else %>
-      <%= link_to "Projects", projects_path, class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
-      <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
-      <span class="text-zinc-900" aria-current="page"><%= @project.name.presence || "Untitled" %></span>
-    <% end %>
-  </nav>
+  <%= render "shared/page_header",
+        title: project_title,
+        breadcrumbs: project_breadcrumbs %>
 
-  <article class="overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5">
-    <% if @project.cover_for_display? %>
+  <% if @project.cover_for_display? %>
+    <div class="overflow-hidden rounded-2xl">
       <%= render "projects/cover",
             project: @project,
             aspect_class: "aspect-[21/9]",
             media_class: "h-full w-full object-cover" %>
-    <% end %>
+    </div>
+  <% end %>
 
-    <div class="p-6 sm:p-8">
-      <div class="flex flex-wrap items-start justify-between gap-4">
-        <div class="flex flex-wrap items-center gap-2">
-          <% if @project.year.present? %>
-            <span class="inline-flex rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600"><%= @project.year %></span>
-          <% end %>
-          <% if @project.status.present? %>
-            <span class="inline-flex rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800"><%= @project.status %></span>
-          <% end %>
-          <% if @project.archived? %>
-            <span class="inline-flex rounded-md bg-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-700">Archived</span>
-          <% end %>
-          <% if @project.favorite? %>
-            <span class="inline-flex items-center gap-1 rounded-md bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-900">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5" aria-hidden="true">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              Favorite
-            </span>
-          <% end %>
-        </div>
-        <% if @project.notion_url.present? %>
-          <%= link_to @project.notion_url, target: "_blank", rel: "noopener noreferrer", class: "inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50" do %>
-            Open in Notion
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-zinc-400" aria-hidden="true">
-              <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-              <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 9.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+  <div class="flex flex-col gap-8">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <% if @project.year.present? %>
+          <span class="inline-flex rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600"><%= @project.year %></span>
+        <% end %>
+        <% if @project.status.present? %>
+          <span class="inline-flex rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800"><%= @project.status %></span>
+        <% end %>
+        <% if @project.archived? %>
+          <span class="inline-flex rounded-md bg-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-700">Archived</span>
+        <% end %>
+        <% if @project.favorite? %>
+          <span class="inline-flex items-center gap-1 rounded-md bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-900">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5" aria-hidden="true">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-          <% end %>
+            Favorite
+          </span>
         <% end %>
       </div>
-
-      <h1 class="mt-4 text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
-        <%= @project.name.presence || "Untitled project" %>
-      </h1>
-
-      <% meta_bits = [@project.client&.name, @project.city, @project.project_type].compact %>
-      <% if meta_bits.any? %>
-        <p class="mt-3 text-base text-zinc-600"><%= meta_bits.join(" · ") %></p>
-      <% end %>
-
-      <% sections = [
-        ["roles", "Roles", Array(@project.roles)],
-        ["deliverables", "Deliverables", Array(@project.deliverables)],
-        ["directions", "Directions", Array(@project.directions)]
-      ].reject { |_, _, items| items.blank? } %>
-
-      <% if sections.any? %>
-        <dl class="mt-8 space-y-6 border-t border-zinc-100 pt-8">
-          <% sections.each do |kind, label, items| %>
-            <div>
-              <dt class="text-xs font-semibold uppercase tracking-wide text-zinc-400"><%= label %></dt>
-              <dd class="mt-2">
-                <ul class="flex flex-wrap gap-2">
-                  <% items.each do |item| %>
-                    <% next if item.blank? %>
-                    <li>
-                      <%= link_to item, project_tag_path(kind, item), class: project_tag_link_class %>
-                    </li>
-                  <% end %>
-                </ul>
-              </dd>
-            </div>
-          <% end %>
-        </dl>
-      <% end %>
-
-      <%= render "projects/body" %>
-
-      <% if @project.notion_created_at.present? || @project.notion_last_edited_at.present? || @project.last_synced_at.present? %>
-        <footer class="mt-8 border-t border-zinc-100 pt-6 text-xs text-zinc-400">
-          <ul class="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1">
-            <% if @project.notion_created_at.present? %>
-              <li>Created in Notion <%= l(@project.notion_created_at, format: :long) %></li>
-            <% end %>
-            <% if @project.notion_last_edited_at.present? %>
-              <li>Last edited <%= l(@project.notion_last_edited_at, format: :long) %></li>
-            <% end %>
-            <% if @project.last_synced_at.present? %>
-              <li>Synced <%= time_ago_in_words(@project.last_synced_at) %> ago</li>
-            <% end %>
-          </ul>
-        </footer>
+      <% if @project.notion_url.present? %>
+        <%= link_to @project.notion_url, target: "_blank", rel: "noopener noreferrer", class: "inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50" do %>
+          Open in Notion
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-zinc-400" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 9.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+          </svg>
+        <% end %>
       <% end %>
     </div>
-  </article>
+
+    <% meta_bits = [@project.client&.name, @project.city, @project.project_type].compact %>
+    <% if meta_bits.any? %>
+      <p class="text-base text-zinc-600"><%= meta_bits.join(" · ") %></p>
+    <% end %>
+
+    <% sections = [
+      ["roles", "Roles", Array(@project.roles)],
+      ["deliverables", "Deliverables", Array(@project.deliverables)],
+      ["directions", "Directions", Array(@project.directions)]
+    ].reject { |_, _, items| items.blank? } %>
+
+    <% if sections.any? %>
+      <dl class="space-y-6 border-t border-zinc-100 pt-8">
+        <% sections.each do |kind, label, items| %>
+          <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-zinc-400"><%= label %></dt>
+            <dd class="mt-2">
+              <ul class="flex flex-wrap gap-2">
+                <% items.each do |item| %>
+                  <% next if item.blank? %>
+                  <li>
+                    <%= link_to item, project_tag_path(kind, item), class: project_tag_link_class %>
+                  </li>
+                <% end %>
+              </ul>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+    <% end %>
+
+    <%= render "projects/body" %>
+
+    <% if @project.notion_created_at.present? || @project.notion_last_edited_at.present? || @project.last_synced_at.present? %>
+      <footer class="border-t border-zinc-100 pt-6 text-xs text-zinc-400">
+        <ul class="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1">
+          <% if @project.notion_created_at.present? %>
+            <li>Created in Notion <%= l(@project.notion_created_at, format: :long) %></li>
+          <% end %>
+          <% if @project.notion_last_edited_at.present? %>
+            <li>Last edited <%= l(@project.notion_last_edited_at, format: :long) %></li>
+          <% end %>
+          <% if @project.last_synced_at.present? %>
+            <li>Synced <%= time_ago_in_words(@project.last_synced_at) %> ago</li>
+          <% end %>
+        </ul>
+      </footer>
+    <% end %>
+  </div>
 </div>

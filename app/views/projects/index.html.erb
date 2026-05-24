@@ -1,10 +1,9 @@
 <% content_for :title, "Projects" %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
-  <header class="flex flex-col gap-1">
-    <h1 class="text-3xl font-semibold tracking-tight text-zinc-900">Projects</h1>
-    <p class="text-sm text-zinc-500">Synced from Notion · active only</p>
-  </header>
+  <%= render "shared/page_header",
+        title: "Projects",
+        breadcrumbs: [{ label: "Projects", current: true }] %>
 
   <%= render "list", projects: @projects %>
 </div>

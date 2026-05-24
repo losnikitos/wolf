@@ -1,20 +1,13 @@
 <% content_for :title, project_collection_title(@kind, @tag) %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
-  <header class="flex flex-col gap-4">
-    <nav class="text-sm">
-      <%= link_to "Projects", projects_path, class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
-      <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
-      <span class="text-zinc-500"><%= project_tag_kind_label(@kind) %></span>
-      <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
-      <span class="text-zinc-900"><%= @tag %></span>
-    </nav>
-
-    <div>
-      <h1 class="text-3xl font-semibold tracking-tight text-zinc-900"><%= project_collection_title(@kind, @tag) %></h1>
-      <p class="mt-1 text-sm text-zinc-500">Active projects with this tag</p>
-    </div>
-  </header>
+  <%= render "shared/page_header",
+        title: project_collection_title(@kind, @tag),
+        breadcrumbs: [
+          { label: "Projects", path: projects_path },
+          { label: project_tag_kind_label(@kind) },
+          { label: @tag, current: true }
+        ] %>
 
   <%= render "list",
         projects: @projects,

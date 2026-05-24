@@ -1,10 +1,9 @@
 <% content_for :title, "Media" %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-5 pb-16 pt-10 sm:px-8">
-  <header class="flex flex-col gap-1">
-    <h1 class="text-3xl font-semibold tracking-tight text-zinc-900">Media</h1>
-    <p class="text-sm text-zinc-500">Synced from Notion</p>
-  </header>
+  <%= render "shared/page_header",
+        title: "Media",
+        breadcrumbs: [{ label: "Media", current: true }] %>
 
   <% if @appearances_by_year.any? %>
     <% @year_names.each do |year_name| %>

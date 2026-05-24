@@ -1,0 +1,23 @@
+<%# locals: title (required), breadcrumbs (array of { label:, path:, current: }) %>
+<header class="flex flex-col gap-4">
+  <% if local_assigns[:breadcrumbs]&.any? %>
+    <nav class="text-sm" aria-label="Breadcrumb">
+      <% breadcrumbs.each_with_index do |crumb, index| %>
+        <% if index.positive? %>
+          <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
+        <% end %>
+        <% if crumb[:current] %>
+          <span class="text-zinc-900" aria-current="page"><%= crumb[:label] %></span>
+        <% elsif crumb[:path].present? %>
+          <%= link_to crumb[:label], crumb[:path], class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
+        <% else %>
+          <span class="text-zinc-500"><%= crumb[:label] %></span>
+        <% end %>
+      <% end %>
+    </nav>
+  <% end %>
+
+  <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">
+    <%= title %>
+  </h1>
+</header>

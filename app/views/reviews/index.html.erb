@@ -1,10 +1,9 @@
 <% content_for :title, "Reviews" %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-5 pb-16 pt-10 sm:px-8">
-  <header class="flex flex-col gap-1">
-    <h1 class="text-3xl font-semibold tracking-tight text-zinc-900">Reviews</h1>
-    <p class="text-sm text-zinc-500">Client reviews synced from Notion</p>
-  </header>
+  <%= render "shared/page_header",
+        title: "Reviews",
+        breadcrumbs: [{ label: "Reviews", current: true }] %>
 
   <% if @reviews.any? %>
     <%= render "list", reviews: @reviews %>
