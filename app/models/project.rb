@@ -27,6 +27,21 @@ class Project < ApplicationRecord
     media.find { |attachment| attachment.blob.metadata["notion_block_id"] == notion_block_id }
   end
 
+  def cover_for_display
+    return cover if cover.attached?
+    return if cover_url.present?
+
+    first_body_media
+  end
+
+  def cover_for_display?
+    cover.attached? || cover_url.present? || first_body_media.present?
+  end
+
+  def first_body_media
+    find_first_body_media(body)
+  end
+
   TAG_KINDS = %w[roles deliverables directions].freeze
 
   scope :favorites, -> { where(favorite: true) }
@@ -71,5 +86,30 @@ class Project < ApplicationRecord
 
   def should_generate_new_friendly_id?
     slug.blank? || will_save_change_to_name?
+  end
+
+  private
+
+  BODY_MEDIA_BLOCK_TYPES = NotionBodyParser::MEDIA_BLOCK_TYPES
+
+  def find_first_body_media(blocks)
+    Array(blocks).each do |block|
+      type = block["type"]
+
+      if BODY_MEDIA_BLOCK_TYPES.include?(type)
+        attachment = media_for_block(block["id"])
+        return attachment if attachment&.image? || attachment&.video?
+      elsif type == "column_list"
+        Array(block["columns"]).each do |column|
+          found = find_first_body_media(column["children"])
+          return found if found
+        end
+      elsif block["children"].present?
+        found = find_first_body_media(block["children"])
+        return found if found
+      end
+    end
+
+    nil
   end
 end

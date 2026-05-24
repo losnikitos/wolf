@@ -48,6 +48,99 @@ class ProjectTest < ActiveSupport::TestCase
     assert_raises(ArgumentError) { Project.with_tag(:unknown, "x") }
   end
 
+  test "cover_for_display uses attached cover when present" do
+    project = create_project!(name: "With cover")
+    project.cover.attach(
+      io: StringIO.new("cover"),
+      filename: "cover.png",
+      content_type: "image/png"
+    )
+    project.media.attach(
+      io: StringIO.new("body"),
+      filename: "body.png",
+      content_type: "image/png",
+      metadata: { notion_block_id: "block-1" }
+    )
+    project.update!(body: [ { "type" => "image", "id" => "block-1" } ])
+
+    assert_equal project.cover, project.cover_for_display
+  end
+
+  test "cover_for_display falls back to first body media in document order" do
+    project = create_project!(name: "Body only")
+    project.media.attach(
+      io: StringIO.new("first"),
+      filename: "first.png",
+      content_type: "image/png",
+      metadata: { notion_block_id: "block-1" }
+    )
+    project.media.attach(
+      io: StringIO.new("second"),
+      filename: "second.png",
+      content_type: "image/png",
+      metadata: { notion_block_id: "block-2" }
+    )
+    project.update!(
+      body: [
+        { "type" => "paragraph", "id" => "intro", "rich_text" => [ { "text" => "Hello" } ] },
+        { "type" => "image", "id" => "block-1" },
+        { "type" => "image", "id" => "block-2" }
+      ]
+    )
+
+    assert_equal "block-1", project.cover_for_display.blob.metadata["notion_block_id"]
+  end
+
+  test "cover_for_display walks nested body blocks and columns" do
+    project = create_project!(name: "Nested")
+    project.media.attach(
+      io: StringIO.new("nested"),
+      filename: "nested.png",
+      content_type: "image/png",
+      metadata: { notion_block_id: "nested-block" }
+    )
+    project.update!(
+      body: [
+        {
+          "type" => "column_list",
+          "id" => "cols",
+          "columns" => [
+            {
+              "type" => "column",
+              "id" => "col-1",
+              "children" => [
+                { "type" => "paragraph", "id" => "p1", "rich_text" => [ { "text" => "Left" } ] }
+              ]
+            },
+            {
+              "type" => "column",
+              "id" => "col-2",
+              "children" => [
+                { "type" => "image", "id" => "nested-block" }
+              ]
+            }
+          ]
+        }
+      ]
+    )
+
+    assert_equal "nested-block", project.cover_for_display.blob.metadata["notion_block_id"]
+  end
+
+  test "cover_for_display prefers cover_url over body media when cover not attached" do
+    project = create_project!(name: "URL cover", cover_url: "https://example.com/cover.jpg")
+    project.media.attach(
+      io: StringIO.new("body"),
+      filename: "body.png",
+      content_type: "image/png",
+      metadata: { notion_block_id: "block-1" }
+    )
+    project.update!(body: [ { "type" => "image", "id" => "block-1" } ])
+
+    assert_nil project.cover_for_display
+    assert project.cover_for_display?
+  end
+
   private
 
   def create_project!(**attrs)

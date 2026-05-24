@@ -1,10 +1,11 @@
 <%# locals: (project:, aspect_class: "aspect-[16/10]", media_class: "h-full w-full object-cover") %>
-<% if project.cover.attached? %>
+<% cover_attachment = project.cover_for_display %>
+<% if cover_attachment %>
   <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
-    <% if project.cover.image? %>
-      <%= image_tag project.cover, alt: "", class: media_class %>
-    <% elsif project.cover.video? %>
-      <%= video_tag url_for(project.cover),
+    <% if cover_attachment.image? %>
+      <%= image_tag cover_attachment, alt: "", class: media_class %>
+    <% elsif cover_attachment.video? %>
+      <%= video_tag url_for(cover_attachment),
             controls: false,
             muted: true,
             playsinline: true,

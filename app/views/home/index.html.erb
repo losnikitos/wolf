@@ -10,22 +10,44 @@
     </p>
   </section>
 
-  <section class="mt-20 sm:mt-28" aria-label="Featured work">
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <% 4.times do |i| %>
-        <div class="aspect-[4/5] overflow-hidden rounded-3xl bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-200/80 sm:aspect-[3/4] <%= "lg:col-span-2 lg:aspect-[16/10]" if i.zero? %>" role="presentation">
-          <div class="flex h-full items-end p-6">
-            <span class="text-sm font-medium text-zinc-400">Скоро</span>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </section>
+  <% if @favorite_projects.any? %>
+    <section class="mt-20 sm:mt-28" aria-label="Featured work">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <% @favorite_projects.each_with_index do |project, i| %>
+          <%= link_to project_path(project), class: ["group block overflow-hidden rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2", ("lg:col-span-2" if i.zero?)] do %>
+            <div class="relative aspect-[4/5] overflow-hidden bg-zinc-100 sm:aspect-[3/4] <%= "lg:aspect-[16/10]" if i.zero? %>">
+              <%= render "projects/cover",
+                    project: project,
+                    aspect_class: "absolute inset-0 h-full w-full",
+                    media_class: "h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" %>
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/70 via-zinc-950/20 to-transparent" aria-hidden="true"></div>
+              <div class="relative flex h-full flex-col justify-end p-6">
+                <% if project.year.present? %>
+                  <span class="text-xs font-medium text-zinc-300"><%= project.year %></span>
+                <% end %>
+                <span class="mt-1 text-sm font-medium text-white sm:text-base">
+                  <%= project.name.presence || "Untitled project" %>
+                </span>
+                <% if project.client.present? %>
+                  <span class="mt-0.5 text-sm text-zinc-300"><%= project.client %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
 
   <section class="mt-24 max-w-2xl sm:mt-32">
     <p class="text-base leading-relaxed text-zinc-600 sm:text-lg">
-      Портфолио и кейсы появятся здесь. Пока можно посмотреть
-      <%= link_to "проекты", projects_path, class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900" %>.
+      <% if @favorite_projects.any? %>
+        Больше работ — в разделе
+        <%= link_to "проекты", projects_path, class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900" %>.
+      <% else %>
+        Портфолио и кейсы появятся здесь. Пока можно посмотреть
+        <%= link_to "проекты", projects_path, class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900" %>.
+      <% end %>
     </p>
   </section>
 </div>
