@@ -1,24 +1,8 @@
-# README
+# Wolfie's website
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Sync projects from Notion
+`bin/rails notion:sync_projects`
 
-Things you may want to cover:
+Sync projects from Notion on production
+`kamal app exec "bin/rails notion:sync_projects"`
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...

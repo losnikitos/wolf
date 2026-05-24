@@ -20,7 +20,7 @@ class NotionMediaAttacher
       return
     end
 
-    if @project.cover.attached? && @project.cover.blob.metadata["notion_url"] == url
+    if @project.cover.attached? && notion_url_unchanged?(@project.cover.blob.metadata["notion_url"], url)
       return
     end
 
@@ -28,7 +28,8 @@ class NotionMediaAttacher
       attachment: @project.cover,
       url: url,
       filename_fallback: "cover",
-      metadata: { notion_url: url }
+      metadata: { notion_url: url },
+      allowed_content_types: Project::COVER_CONTENT_TYPES
     )
   end
 
@@ -45,11 +46,14 @@ class NotionMediaAttacher
         attachment.blob.metadata["notion_block_id"] == item[:notion_block_id]
       end
 
-      if existing && existing.blob.metadata["notion_url"] == item[:url]
+      if existing && notion_url_unchanged?(existing.blob.metadata["notion_url"], item[:url])
         next
       end
 
-      existing&.purge
+      if existing
+        existing.purge
+        @project.media.reload
+      end
 
       attach_file(
         attachment: @project.media,
@@ -65,13 +69,18 @@ class NotionMediaAttacher
 
   private
 
-  def attach_file(attachment:, url:, filename_fallback:, metadata:)
-    io, filename, content_type = fetch(url, filename_fallback: filename_fallback)
+  def attach_file(attachment:, url:, filename_fallback:, metadata:, allowed_content_types: Project::MEDIA_CONTENT_TYPES)
+    io, filename, content_type = parse_fetch_result(fetch(url, filename_fallback: filename_fallback))
     return unless io
+
+    if blob_attachable?(io)
+      attach_blob(attachment, io, metadata)
+      return
+    end
 
     filename = filename.presence || "#{filename_fallback}.bin"
     content_type = normalize_content_type(content_type, filename)
-    return unless Project::MEDIA_CONTENT_TYPES.include?(content_type)
+    return unless allowed_content_types.include?(content_type)
 
     attachment.attach(
       io: io,
@@ -85,6 +94,35 @@ class NotionMediaAttacher
     return @downloader.call(url) if @downloader
 
     download(url, filename_fallback: filename_fallback)
+  end
+
+  def parse_fetch_result(result)
+    return if result.nil?
+    return result if result.is_a?(Array)
+    return [ result, result.filename.to_s, result.content_type ] if blob_attachable?(result)
+
+    nil
+  end
+
+  def blob_attachable?(object)
+    object.is_a?(ActiveStorage::Blob) || object.class.name == "ActiveStorage::Blob"
+  end
+
+  def attach_blob(attachment, blob, metadata)
+    blob = ActiveStorage::Blob.find(blob.id)
+    blob.update!(metadata: blob.metadata.merge(metadata.stringify_keys))
+    attachment.attach(blob)
+  end
+
+  def notion_url_unchanged?(stored, current)
+    normalize_notion_url(stored) == normalize_notion_url(current)
+  end
+
+  def normalize_notion_url(url)
+    uri = URI.parse(url)
+    "#{uri.scheme}://#{uri.host}#{uri.path}"
+  rescue URI::InvalidURIError
+    url
   end
 
   def download(url, filename_fallback:)

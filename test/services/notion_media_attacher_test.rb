@@ -84,6 +84,38 @@ class NotionMediaAttacherTest < ActiveSupport::TestCase
     assert_equal 1, @project.media.count
   end
 
+  test "skips media download when only signed url query params change" do
+    items = [
+      { notion_block_id: "block-1", url: "https://files.notion/one.png?token=new", block_type: "image" }
+    ]
+    @project.media.attach(
+      io: StringIO.new("existing"),
+      filename: "one.png",
+      content_type: "image/png",
+      metadata: { notion_block_id: "block-1", notion_url: "https://files.notion/one.png?token=old" }
+    )
+
+    NotionMediaAttacher.attach_media!(@project, items, downloader: ->(_url) { flunk "should not download" })
+
+    assert_equal 1, @project.media.count
+  end
+
+  test "attaches media when downloader returns an existing blob" do
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: StringIO.new("cached"),
+      filename: "one.png",
+      content_type: "image/png"
+    )
+    items = [
+      { notion_block_id: "block-1", url: "https://files.notion/one.png", block_type: "image" }
+    ]
+
+    NotionMediaAttacher.attach_media!(@project, items, downloader: ->(_url) { blob })
+
+    assert_equal 1, @project.media.count
+    assert_equal "block-1", @project.media.first.blob.metadata["notion_block_id"]
+  end
+
   test "purges media removed from notion" do
     @project.media.attach(
       io: StringIO.new("existing"),
