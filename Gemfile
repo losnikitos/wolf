@@ -76,3 +76,7 @@ gem "friendly_id", "~> 5.7"
 gem "babosa", "~> 2.1"
 
 gem "heroicons"
+
+gem "informers"
+gem "sqlite-vec"
+gem "neighbor"

@@ -65,5 +65,7 @@ end %>
     <% end %>
 
     <%= render "projects/body" %>
+
+    <%= render "projects/recommended", recommended_projects: @recommended_projects, client: @client %>
   </div>
 </div>

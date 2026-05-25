@@ -18,6 +18,8 @@ class ProjectsController < ApplicationController
     else
       @project = Project.friendly.find(params[:slug])
     end
+
+    @recommended_projects = @project.recommended_projects
   end
 
   private

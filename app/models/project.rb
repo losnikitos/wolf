@@ -18,6 +18,8 @@ class Project < ApplicationRecord
 
   validates :notion_page_id, presence: true, uniqueness: true
 
+  has_neighbors :embedding, dimensions: ProjectEmbeddingService::DIMENSIONS
+
   TAG_KINDS = %w[roles deliverables directions].freeze
 
   scope :favorites, -> { where(favorite: true) }
@@ -69,5 +71,13 @@ class Project < ApplicationRecord
 
   def should_generate_new_friendly_id?
     slug.blank? || will_save_change_to_name?
+  end
+
+  def recommended_projects(limit: 2)
+    return Project.none if embedding.blank?
+
+    nearest_neighbors(:embedding, distance: "cosine")
+      .merge(Project.active)
+      .limit(limit)
   end
 end

@@ -54,6 +54,7 @@ en:
       deliverables: Deliverables
       directions: Directions
     collection_title: "%{label}: %{tag}"
+    recommended_heading: More to read
   clients:
     title: Clients
     other_group: Other
