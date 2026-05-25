@@ -19,7 +19,7 @@ class ProjectsController < ApplicationController
       @project = Project.friendly.find(params[:slug])
     end
 
-    @recommended_projects = @project.recommended_projects
+    @recommended_projects = @project.recommended
   end
 
   private

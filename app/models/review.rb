@@ -1,4 +1,5 @@
 class Review < ApplicationRecord
+  include Embeddable
   include NameSearchable
   include NotionPageContent
 
@@ -23,5 +24,9 @@ class Review < ApplicationRecord
 
   def should_generate_new_friendly_id?
     slug.blank? || will_save_change_to_name?
+  end
+
+  def embedding_text
+    name.to_s
   end
 end

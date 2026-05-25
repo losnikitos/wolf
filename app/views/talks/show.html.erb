@@ -45,5 +45,10 @@
         </p>
       </div>
     <% end %>
+
+    <%= render "shared/recommended",
+          items: @recommended_talks,
+          heading: t("shared.recommended_heading"),
+          card_partial: "talks/card" %>
   </div>
 </div>

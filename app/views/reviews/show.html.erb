@@ -20,5 +20,10 @@
     </div>
 
     <%= render "shared/notion_body", record: @review %>
+
+    <%= render "shared/recommended",
+          items: @recommended_reviews,
+          heading: t("shared.recommended_heading"),
+          card_partial: "reviews/card" %>
   </div>
 </div>

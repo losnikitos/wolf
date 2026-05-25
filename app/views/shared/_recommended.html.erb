@@ -1,0 +1,12 @@
+<% if items.any? %>
+  <div class="border-t border-zinc-100 pt-8">
+    <h2 class="text-xs font-semibold uppercase tracking-wide text-zinc-400"><%= heading %></h2>
+    <ul class="mt-5 grid gap-5 sm:grid-cols-2">
+      <% items.each do |item| %>
+        <li>
+          <%= render card_partial, item:, **(local_assigns[:card_locals] || {}) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

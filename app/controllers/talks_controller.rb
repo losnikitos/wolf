@@ -7,5 +7,6 @@ class TalksController < ApplicationController
 
   def show
     @talk = Talk.friendly.find(params[:slug])
+    @recommended_talks = @talk.recommended
   end
 end

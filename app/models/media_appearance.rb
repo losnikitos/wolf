@@ -1,4 +1,5 @@
 class MediaAppearance < ApplicationRecord
+  include Embeddable
   include NameSearchable
   include NotionPageContent
 
@@ -29,5 +30,9 @@ class MediaAppearance < ApplicationRecord
 
   def appearance_year
     appearance_date&.year
+  end
+
+  def embedding_text
+    [ name, publication, organizer, location, project&.name ].compact_blank.join(" · ")
   end
 end

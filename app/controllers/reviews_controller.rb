@@ -5,5 +5,6 @@ class ReviewsController < ApplicationController
 
   def show
     @review = Review.friendly.find(params[:slug])
+    @recommended_reviews = @review.recommended
   end
 end

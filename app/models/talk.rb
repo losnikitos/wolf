@@ -1,4 +1,5 @@
 class Talk < ApplicationRecord
+  include Embeddable
   include NameSearchable
   include NotionPageContent
 
@@ -29,5 +30,9 @@ class Talk < ApplicationRecord
 
   def talk_year
     talk_date&.year
+  end
+
+  def embedding_text
+    [ name, topic, organizer, location, project&.name ].compact_blank.join(" · ")
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_25_100024) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_25_101345) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -61,6 +61,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_25_100024) do
     t.boolean "archived", default: false, null: false
     t.json "body", default: [], null: false
     t.datetime "created_at", null: false
+    t.binary "embedding"
     t.datetime "last_synced_at"
     t.string "location"
     t.string "name"
@@ -117,6 +118,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_25_100024) do
     t.boolean "archived", default: false, null: false
     t.json "body", default: [], null: false
     t.datetime "created_at", null: false
+    t.binary "embedding"
     t.datetime "last_synced_at"
     t.string "name"
     t.datetime "notion_created_at"
@@ -144,6 +146,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_25_100024) do
     t.boolean "archived", default: false, null: false
     t.json "body", default: [], null: false
     t.datetime "created_at", null: false
+    t.binary "embedding"
     t.datetime "last_synced_at"
     t.string "location"
     t.string "name"

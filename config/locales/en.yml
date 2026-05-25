@@ -25,6 +25,7 @@ en:
     archived: Archived
     favorite: Favorite
     related_project: Related project
+    recommended_heading: More to read
     open_in_notion: Open in Notion
     sync_from_notion: Sync from Notion
     image_unavailable: Image unavailable
@@ -54,7 +55,6 @@ en:
       deliverables: Deliverables
       directions: Directions
     collection_title: "%{label}: %{tag}"
-    recommended_heading: More to read
   clients:
     title: Clients
     other_group: Other

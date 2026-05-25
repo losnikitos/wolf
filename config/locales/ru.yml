@@ -25,6 +25,7 @@ ru:
     archived: В архиве
     favorite: Избранное
     related_project: Связанный проект
+    recommended_heading: Ещё почитать
     open_in_notion: Открыть в Notion
     sync_from_notion: Синхронизировать из Notion
     image_unavailable: Изображение недоступно
@@ -56,7 +57,6 @@ ru:
       deliverables: Результаты
       directions: Направления
     collection_title: "%{label}: %{tag}"
-    recommended_heading: Ещё почитать
   clients:
     title: Клиенты
     other_group: Другое

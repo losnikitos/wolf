@@ -1,4 +1,5 @@
 class Project < ApplicationRecord
+  include Embeddable
   include NameSearchable
   include NotionPageContent
 
@@ -17,8 +18,6 @@ class Project < ApplicationRecord
   has_one_attached :cover
 
   validates :notion_page_id, presence: true, uniqueness: true
-
-  has_neighbors :embedding, dimensions: ProjectEmbeddingService::DIMENSIONS
 
   TAG_KINDS = %w[roles deliverables directions].freeze
 
@@ -73,11 +72,12 @@ class Project < ApplicationRecord
     slug.blank? || will_save_change_to_name?
   end
 
-  def recommended_projects(limit: 2)
-    return Project.none if embedding.blank?
+  def embedding_text
+    tags = Array(roles) + Array(deliverables) + Array(directions)
+    [ name, *tags ].compact_blank.join(" · ")
+  end
 
-    nearest_neighbors(:embedding, distance: "cosine")
-      .merge(Project.active)
-      .limit(limit)
+  def recommended_projects(limit: 2)
+    recommended(limit:)
   end
 end

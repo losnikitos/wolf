@@ -21,12 +21,6 @@ class NotionProjectsSyncer < Notion::DatabaseSyncer
 
   private
 
-  def upsert(record, page)
-    outcome = super
-    ProjectEmbeddingJob.perform_later(record) if %i[created updated].include?(outcome)
-    outcome
-  end
-
   def assign_relations(project, page)
     property = page.properties["Client"]
     page_ids = @property_extractor.extract(property, :relation)

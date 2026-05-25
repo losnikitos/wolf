@@ -7,5 +7,6 @@ class MediaController < ApplicationController
 
   def show
     @media_appearance = MediaAppearance.friendly.find(params[:slug])
+    @recommended_media_appearances = @media_appearance.recommended
   end
 end

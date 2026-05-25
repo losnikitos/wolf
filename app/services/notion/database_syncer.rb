@@ -66,10 +66,22 @@ module Notion
       record.save!
       sync_page_content!(record, page)
 
-      return :created if was_new_record
-      return :updated if content_changed
+      outcome = if was_new_record
+        :created
+      elsif content_changed
+        :updated
+      else
+        :unchanged
+      end
 
-      :unchanged
+      enqueue_embedding(record) if %i[created updated].include?(outcome)
+      outcome
+    end
+
+    def enqueue_embedding(record)
+      return unless record.class.column_names.include?("embedding")
+
+      RecordEmbeddingJob.perform_later(record)
     end
 
     def needs_sync?(record, page)
