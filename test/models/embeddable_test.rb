@@ -9,14 +9,18 @@ class EmbeddableTest < ActiveSupport::TestCase
   test "recommended returns nearest active records excluding self" do
     anchor = create_talk!(name: "Anchor", embedding: unit_vector(0))
     similar = create_talk!(name: "Similar", embedding: unit_vector(0, offset: 0.01))
+    closer = create_talk!(name: "Closer", embedding: unit_vector(0, offset: 0.02))
+    nearer = create_talk!(name: "Nearer", embedding: unit_vector(0, offset: 0.03))
     different = create_talk!(name: "Different", embedding: unit_vector(1))
     archived = create_talk!(name: "Archived", embedding: unit_vector(0, offset: 0.005), archived: true)
 
     recommendations = anchor.recommended
 
-    assert_equal 2, recommendations.size
+    assert_equal 3, recommendations.size
     assert_includes recommendations.map(&:id), similar.id
-    assert_includes recommendations.map(&:id), different.id
+    assert_includes recommendations.map(&:id), closer.id
+    assert_includes recommendations.map(&:id), nearer.id
+    assert_not_includes recommendations.map(&:id), different.id
     assert_not_includes recommendations.map(&:id), anchor.id
     assert_not_includes recommendations.map(&:id), archived.id
   end

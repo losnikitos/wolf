@@ -77,7 +77,7 @@ class Project < ApplicationRecord
     [ name, *tags ].compact_blank.join(" · ")
   end
 
-  def recommended_projects(limit: 2)
+  def recommended_projects(limit: 3)
     recommended(limit:)
   end
 end
