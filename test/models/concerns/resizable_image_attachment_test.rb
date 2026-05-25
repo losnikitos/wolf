@@ -52,7 +52,7 @@ class ResizableImageAttachmentTest < ActiveSupport::TestCase
 
       image = Vips::Image.new_from_buffer(variant.download, "")
       assert_operator image.width, :<=, limit[0]
-      assert_operator image.height, :<=, limit[1]
+      assert_operator image.height, :<=, limit[1] if limit[1]
     end
   end
 
