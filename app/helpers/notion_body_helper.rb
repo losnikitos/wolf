@@ -110,7 +110,7 @@ module NotionBodyHelper
       media = if embed_url.present?
         render_notion_embed(embed_url)
       elsif attachment&.image?
-        image_tag attachment, alt: "", class: "w-full object-cover"
+        image_tag display_image(attachment, size: :full), alt: "", class: "w-full object-cover"
       elsif attachment&.video?
         video_tag url_for(attachment), controls: true, playsinline: true, class: "w-full"
       elsif type == "image" && attachment.nil?

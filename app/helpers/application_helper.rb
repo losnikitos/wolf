@@ -37,4 +37,8 @@ module ApplicationHelper
   def registration_enabled?
     RegistrationsController::REGISTRATION_ENABLED
   end
+
+  def display_image(attachment, size:)
+    ResizableImageAttachment.variant_for(attachment, size: size)
+  end
 end
