@@ -3,11 +3,13 @@
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-5 pb-16 pt-10 sm:px-8">
   <%= render "shared/page_header", title: t("media.title") %>
 
-  <% if @appearances_by_year.any? %>
-    <% @year_names.each do |year_name| %>
-      <% appearances = @appearances_by_year[year_name] %>
+  <% if @appearances_by_publication.any? %>
+    <% @publication_names.each do |publication_name| %>
+      <% appearances = @appearances_by_publication[publication_name] %>
       <section class="flex flex-col gap-4">
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400"><%= localized_year_label(year_name) %></h2>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-400">
+          <%= publication_name == "Unknown" ? t("shared.unknown") : publication_name %>
+        </h2>
         <%= render "list", media_appearances: appearances %>
       </section>
     <% end %>

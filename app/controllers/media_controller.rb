@@ -1,8 +1,10 @@
 class MediaController < ApplicationController
   def index
     appearances = MediaAppearance.active.ordered
-    @appearances_by_year = appearances.group_by { |appearance| appearance.appearance_year || "Unknown" }
-    @year_names = @appearances_by_year.keys.sort_by { |year| year == "Unknown" ? 0 : year.to_i }.reverse
+    @appearances_by_publication = appearances.group_by { |appearance| appearance.publication.presence || "Unknown" }
+    @publication_names = @appearances_by_publication.keys.sort_by do |name|
+      [ -@appearances_by_publication[name].size, name == "Unknown" ? 1 : 0, name ]
+    end
   end
 
   def show
