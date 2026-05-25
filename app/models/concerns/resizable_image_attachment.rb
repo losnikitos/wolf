@@ -1,6 +1,6 @@
 module ResizableImageAttachment
   FULL_LIMIT = [ 2000, 2000 ].freeze
-  THUMB_LIMIT = [ 500, 500 ].freeze
+  THUMB_LIMIT = [ 1000, 1000 ].freeze
   VARIANT_FORMAT = :webp
   VARIANT_QUALITY = 85
 
