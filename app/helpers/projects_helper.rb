@@ -1,7 +1,7 @@
 module ProjectsHelper
   def project_path_for(project, client: nil)
-    scoped_client = project.client || client
-    if scoped_client
+    if client
+      scoped_client = project.client || client
       client_project_path(client_slug: scoped_client.slug, project_slug: project.slug)
     else
       project_path(project)

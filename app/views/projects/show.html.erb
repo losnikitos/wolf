@@ -70,6 +70,7 @@ end %>
     <%= render "shared/recommended",
           items: @recommended_projects,
           heading: t("shared.recommended_heading"),
-          card_partial: "projects/card" %>
+          card_partial: "projects/card",
+          card_locals: @client ? { client: @client } : {} %>
   </div>
 </div>
