@@ -1,0 +1,6 @@
+en:
+  avo:
+    resource_translations:
+      media:
+        one: Media
+        other: Media
