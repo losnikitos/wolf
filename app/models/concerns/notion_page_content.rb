@@ -24,17 +24,24 @@ module NotionPageContent
     page_content_last_synced_at.nil?
   end
 
-  def cover_for_display
+  def notion_cover_for_display
     return cover if respond_to?(:cover) && cover.attached?
     return if respond_to?(:cover_url) && cover_url.present?
 
-    first_body_media
+    nil
+  end
+
+  def notion_cover_for_display?
+    (respond_to?(:cover) && cover.attached?) ||
+      (respond_to?(:cover_url) && cover_url.present?)
+  end
+
+  def cover_for_display
+    notion_cover_for_display || first_body_media
   end
 
   def cover_for_display?
-    (respond_to?(:cover) && cover.attached?) ||
-      (respond_to?(:cover_url) && cover_url.present?) ||
-      first_body_media.present?
+    notion_cover_for_display? || first_body_media.present?
   end
 
   def first_body_media

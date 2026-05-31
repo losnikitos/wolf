@@ -17,10 +17,11 @@ end %>
         title: project_title,
         breadcrumbs: project_breadcrumbs %>
 
-  <% if @project.cover_for_display? %>
+  <% if @project.notion_cover_for_display? %>
     <div class="overflow-hidden rounded-2xl">
       <%= render "shared/cover",
             record: @project,
+            cover_method: :notion_cover_for_display,
             aspect_class: "aspect-[21/9]",
             media_class: "h-full w-full object-cover",
             size: :full %>

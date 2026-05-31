@@ -129,7 +129,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal "nested-block", project.cover_for_display.blob.metadata["notion_block_id"]
   end
 
-  test "cover_for_display prefers cover_url over body media when cover not attached" do
+  test "cover_for_display does not use cover_url when cover not attached" do
     project = create_project!(name: "URL cover", cover_url: "https://example.com/cover.jpg")
     project.media.attach(
       io: StringIO.new("body"),
@@ -139,7 +139,25 @@ class ProjectTest < ActiveSupport::TestCase
     )
     project.update!(body: [ { "type" => "image", "id" => "block-1" } ])
 
-    assert_nil project.cover_for_display
+    assert_equal "block-1", project.cover_for_display.blob.metadata["notion_block_id"]
+    assert project.cover_for_display?
+    assert_nil project.notion_cover_for_display
+    assert project.notion_cover_for_display?
+  end
+
+  test "notion_cover_for_display does not fall back to body media" do
+    project = create_project!(name: "Body only")
+    project.media.attach(
+      io: StringIO.new("first"),
+      filename: "first.png",
+      content_type: "image/png",
+      metadata: { notion_block_id: "block-1" }
+    )
+    project.update!(body: [ { "type" => "image", "id" => "block-1" } ])
+
+    assert_nil project.notion_cover_for_display
+    assert_not project.notion_cover_for_display?
+    assert_equal "block-1", project.cover_for_display.blob.metadata["notion_block_id"]
     assert project.cover_for_display?
   end
 
