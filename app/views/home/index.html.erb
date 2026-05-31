@@ -17,11 +17,19 @@
   </section>
 
   <% if @favorite_projects.any? %>
-    <section class="mt-20 sm:mt-28" aria-label="<%= t("home.featured_work") %>">
+    <section class="mt-20 sm:mt-28" aria-label="<%= t("home.selected_projects") %>">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <h2 class="text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
+          <%= t("home.selected_projects") %>
+        </h2>
+        <%= link_to t("home.all_projects"),
+              projects_path,
+              class: "font-medium text-zinc-600 underline decoration-zinc-300 underline-offset-4 transition hover:text-zinc-900 hover:decoration-zinc-900" %>
+      </div>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <% @favorite_projects.each_with_index do |project, i| %>
-          <%= link_to project_path(project), class: ["group block overflow-hidden rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2", ("lg:col-span-2" if i.zero?)] do %>
-            <div class="relative aspect-[4/5] overflow-hidden bg-zinc-100 h-full sm:aspect-[3/4] <%= "lg:aspect-[16/10]" if i.zero? %>">
+          <%= link_to project_path(project), class: ["group block overflow-hidden rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 lg:col-span-2"] do %>
+            <div class="relative aspect-[4/5] overflow-hidden bg-zinc-100 h-full sm:aspect-[3/4] lg:aspect-[16/10]">
               <%= render "shared/cover",
                     record: project,
                     show_title: false,

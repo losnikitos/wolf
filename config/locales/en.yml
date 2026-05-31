@@ -37,6 +37,8 @@ en:
     bio_html: I help launch projects and strengthen existing ones as a creative and product director. More than 190 works for MTV, STS, Za Rulem, the Moscow Marathon, medical centers, stores, and art spaces. I take on turnkey tasks — strategy, naming, design layouts, and distinctive business concepts. I assemble a team for each task, attract press attention, and offer clear solutions. I work quickly, independently, and with a focus on results. You can ask about your project %{link}.
     bio_telegram_link: via Telegram
     featured_work: Featured work
+    selected_projects: Selected projects
+    all_projects: All projects
     more_work_html: More work is in the %{link} section.
     more_work_link: projects
     empty_portfolio_html: Portfolio and case studies will appear here. For now, see %{link}.
