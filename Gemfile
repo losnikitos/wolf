@@ -81,4 +81,4 @@ gem "informers"
 gem "sqlite-vec"
 gem "neighbor"
 
-gem "avo", "~> 3.31"
+gem "avo", "~> 3.32"
