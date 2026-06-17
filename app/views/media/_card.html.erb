@@ -1,6 +1,6 @@
 <% appearance_title = item.name.presence || t("media.untitled") %>
 <%= link_to media_appearance_path_for(item),
-      class: "group block h-full rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10" do %>
+      class: "group block h-full rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10 dark:border-zinc-800/80 dark:bg-zinc-900 dark:shadow-none dark:hover:border-zinc-700" do %>
   <article class="flex h-full flex-col overflow-hidden rounded-2xl">
     <%= render "shared/cover",
           record: item,
@@ -9,18 +9,18 @@
     <div class="flex flex-1 flex-col gap-3 p-5">
       <div class="flex flex-wrap items-center gap-2">
         <% if item.appearance_date.present? %>
-          <span class="inline-flex rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600">
+          <span class="inline-flex rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
             <%= l(item.appearance_date, format: :long) %>
           </span>
         <% end %>
       </div>
       <% if item.cover_for_display? %>
-        <h3 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700">
+        <h3 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700 dark:text-zinc-100 dark:group-hover:text-zinc-300">
           <%= appearance_title %>
         </h3>
       <% end %>
       <% if item.publication.present? %>
-        <p class="mt-auto text-sm text-zinc-500"><%= item.publication %></p>
+        <p class="mt-auto text-sm text-zinc-500 dark:text-zinc-400"><%= item.publication %></p>
       <% end %>
     </div>
   </article>

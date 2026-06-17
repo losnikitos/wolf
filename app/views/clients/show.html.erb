@@ -9,7 +9,7 @@
         ] %>
 
   <% if @client.client_group.present? %>
-    <span class="inline-flex w-fit rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600"><%= @client.client_group %></span>
+    <span class="inline-flex w-fit rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"><%= @client.client_group %></span>
   <% end %>
 
   <%= render "projects/list",

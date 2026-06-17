@@ -1,4 +1,4 @@
-<p class="text-sm tabular-nums text-zinc-500"><%= t("projects.count", count: projects.size) %></p>
+<p class="text-sm tabular-nums text-zinc-500 dark:text-zinc-400"><%= t("projects.count", count: projects.size) %></p>
 
 <% if projects.any? %>
   <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -9,12 +9,12 @@
     <% end %>
   </ul>
 <% elsif local_assigns[:empty_message].present? %>
-  <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center">
-    <p class="text-zinc-600"><%= empty_message %></p>
+  <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center dark:border-zinc-800 dark:bg-zinc-900/50">
+    <p class="text-zinc-600 dark:text-zinc-400"><%= empty_message %></p>
   </div>
 <% else %>
-  <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center">
-    <p class="text-zinc-600"><%= t("projects.no_projects") %></p>
-    <p class="mt-2 text-sm text-zinc-500"><%= t("shared.run_notion_sync") %></p>
+  <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center dark:border-zinc-800 dark:bg-zinc-900/50">
+    <p class="text-zinc-600 dark:text-zinc-400"><%= t("projects.no_projects") %></p>
+    <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400"><%= t("shared.run_notion_sync") %></p>
   </div>
 <% end %>

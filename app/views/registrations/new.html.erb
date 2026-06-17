@@ -1,6 +1,6 @@
 <%= render layout: "shared/auth_card" do %>
-  <h1 class="text-center text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl">Sign up</h1>
-  <p class="mt-1 text-center text-sm text-zinc-600">
+  <h1 class="text-center text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl dark:text-zinc-100">Sign up</h1>
+  <p class="mt-1 text-center text-sm text-zinc-600 dark:text-zinc-400">
     Already have an account?
     <%= link_to "Sign in", sign_in_path, class: tw_text_link_classes %>
   </p>
@@ -25,7 +25,7 @@
     <div>
       <%= form.label :password, class: tw_label_classes %>
       <%= form.password_field :password, required: true, autocomplete: "new-password", class: tw_input_classes %>
-      <p class="mt-1 text-xs text-zinc-500">12 characters minimum.</p>
+      <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">12 characters minimum.</p>
     </div>
 
     <div>

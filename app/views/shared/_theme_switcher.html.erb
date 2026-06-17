@@ -1,0 +1,20 @@
+<% theme_btn_class = "inline-flex rounded-full p-1.5 text-zinc-500 transition hover:text-zinc-900 aria-pressed:bg-zinc-900 aria-pressed:text-white dark:text-zinc-400 dark:hover:text-zinc-100 dark:aria-pressed:bg-zinc-100 dark:aria-pressed:text-zinc-900" %>
+
+<div data-controller="theme" class="flex items-center gap-0.5 rounded-full border border-zinc-200 p-0.5 dark:border-zinc-700" role="group" aria-label="<%= t("theme.label") %>">
+  <button type="button"
+        data-theme-target="light"
+        data-action="theme#selectLight"
+        class="<%= theme_btn_class %>"
+        aria-label="<%= t("theme.light") %>"
+        aria-pressed="false">
+    <%= heroicon "sun", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
+  </button>
+  <button type="button"
+        data-theme-target="dark"
+        data-action="theme#selectDark"
+        class="<%= theme_btn_class %>"
+        aria-label="<%= t("theme.dark") %>"
+        aria-pressed="false">
+    <%= heroicon "moon", variant: :outline, options: { class: "size-4", aria_hidden: "true" } %>
+  </button>
+</div>

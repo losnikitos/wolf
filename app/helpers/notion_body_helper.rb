@@ -17,26 +17,26 @@ module NotionBodyHelper
 
     case type
     when "heading_1"
-      tag.h1(render_notion_rich_text(rich_text), id: id, class: "mt-10 mb-2 text-3xl font-bold tracking-tight text-zinc-900 first:mt-0")
+      tag.h1(render_notion_rich_text(rich_text), id: id, class: "mt-10 mb-2 text-3xl font-bold tracking-tight text-zinc-900 first:mt-0 dark:text-zinc-100")
     when "heading_2"
-      tag.h2(render_notion_rich_text(rich_text), id: id, class: "mt-8 mb-2 text-2xl font-semibold tracking-tight text-zinc-900 first:mt-0")
+      tag.h2(render_notion_rich_text(rich_text), id: id, class: "mt-8 mb-2 text-2xl font-semibold tracking-tight text-zinc-900 first:mt-0 dark:text-zinc-100")
     when "heading_3"
-      tag.h3(render_notion_rich_text(rich_text), id: id, class: "mt-6 mb-1 text-xl font-semibold text-zinc-900 first:mt-0")
+      tag.h3(render_notion_rich_text(rich_text), id: id, class: "mt-6 mb-1 text-xl font-semibold text-zinc-900 first:mt-0 dark:text-zinc-100")
     when "quote"
-      tag.blockquote(class: "my-4 border-l-4 border-zinc-300 pl-4 text-zinc-700 italic") do
+      tag.blockquote(class: "my-4 border-l-4 border-zinc-300 pl-4 text-zinc-700 italic dark:border-zinc-600 dark:text-zinc-300") do
         render_notion_rich_text(rich_text)
       end
     when "callout"
-      tag.aside(class: "my-4 flex gap-3 rounded-lg bg-zinc-50 px-4 py-3 text-zinc-800 ring-1 ring-inset ring-zinc-200/80") do
+      tag.aside(class: "my-4 flex gap-3 rounded-lg bg-zinc-50 px-4 py-3 text-zinc-800 ring-1 ring-inset ring-zinc-200/80 dark:bg-zinc-900 dark:text-zinc-200 dark:ring-zinc-700/80") do
         safe_join([
           tag.span("💡", class: "text-lg leading-none", aria: { hidden: true }),
           tag.div(render_notion_rich_text(rich_text), class: "min-w-0 flex-1")
         ])
       end
     when "bulleted_list_item"
-      tag.div(class: "my-1 flex gap-2 pl-1 text-zinc-800") do
+      tag.div(class: "my-1 flex gap-2 pl-1 text-zinc-800 dark:text-zinc-200") do
         safe_join([
-          tag.span("•", class: "mt-2.5 shrink-0 text-zinc-400", aria: { hidden: true }),
+          tag.span("•", class: "mt-2.5 shrink-0 text-zinc-400 dark:text-zinc-500", aria: { hidden: true }),
           tag.div(class: "min-w-0 flex-1") do
             safe_join([
               render_notion_rich_text(rich_text),
@@ -46,7 +46,7 @@ module NotionBodyHelper
         ])
       end
     when "numbered_list_item"
-      tag.div(class: "my-1 flex gap-2 pl-1 text-zinc-800") do
+      tag.div(class: "my-1 flex gap-2 pl-1 text-zinc-800 dark:text-zinc-200") do
         tag.div(class: "min-w-0 flex-1") do
           safe_join([
             render_notion_rich_text(rich_text),
@@ -55,9 +55,9 @@ module NotionBodyHelper
         end
       end
     when "toggle"
-      tag.details(class: "my-3 rounded-lg border border-zinc-200/80 bg-zinc-50/50 px-4 py-2") do
+      tag.details(class: "my-3 rounded-lg border border-zinc-200/80 bg-zinc-50/50 px-4 py-2 dark:border-zinc-700/80 dark:bg-zinc-900/50") do
         safe_join([
-          tag.summary(render_notion_rich_text(rich_text), class: "cursor-pointer font-medium text-zinc-900"),
+          tag.summary(render_notion_rich_text(rich_text), class: "cursor-pointer font-medium text-zinc-900 dark:text-zinc-100"),
           tag.div(render_notion_blocks(children, record: record), class: "mt-3 space-y-2")
         ])
       end
@@ -74,7 +74,7 @@ module NotionBodyHelper
         end)
       end
     else
-      tag.p(render_notion_rich_text(rich_text), class: "my-2 leading-7 text-zinc-800")
+      tag.p(render_notion_rich_text(rich_text), class: "my-2 leading-7 text-zinc-800 dark:text-zinc-200")
     end
   end
 
@@ -89,12 +89,12 @@ module NotionBodyHelper
     classes << "italic" if segment["italic"]
     classes << "underline" if segment["underline"]
     classes << "line-through" if segment["strikethrough"]
-    classes << "rounded bg-zinc-100 px-1 py-0.5 font-mono text-sm text-zinc-800" if segment["code"]
+    classes << "rounded bg-zinc-100 px-1 py-0.5 font-mono text-sm text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200" if segment["code"]
 
     content = tag.span(text, class: classes.presence)
 
     if href.present?
-      link_to content, href, target: "_blank", rel: "noopener noreferrer", class: "text-blue-600 underline decoration-blue-600/40 underline-offset-2 hover:decoration-blue-600"
+      link_to content, href, target: "_blank", rel: "noopener noreferrer", class: "text-blue-600 underline decoration-blue-600/40 underline-offset-2 hover:decoration-blue-600 dark:text-blue-400 dark:decoration-blue-400/40 dark:hover:decoration-blue-400"
     else
       content
     end
@@ -106,7 +106,7 @@ module NotionBodyHelper
     type = block["type"]
     embed_url = block["embed_url"]
 
-    tag.figure(class: "my-6 overflow-hidden rounded-xl bg-zinc-100") do
+    tag.figure(class: "my-6 overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800") do
       media = if embed_url.present?
         render_notion_embed(embed_url)
       elsif attachment&.image?
@@ -114,12 +114,12 @@ module NotionBodyHelper
       elsif attachment&.video?
         video_tag url_for(attachment), controls: true, playsinline: true, class: "w-full"
       elsif type == "image" && attachment.nil?
-        tag.div(t("shared.image_unavailable"), class: "flex aspect-video items-center justify-center text-sm text-zinc-400")
+        tag.div(t("shared.image_unavailable"), class: "flex aspect-video items-center justify-center text-sm text-zinc-400 dark:text-zinc-500")
       end
 
       safe_join([
         media,
-        caption.present? ? tag.figcaption(caption, class: "px-4 py-3 text-sm text-zinc-500") : nil
+        caption.present? ? tag.figcaption(caption, class: "px-4 py-3 text-sm text-zinc-500 dark:text-zinc-400") : nil
       ].compact)
     end
   end
@@ -139,7 +139,7 @@ module NotionBodyHelper
         )
       end
     else
-      link_to url, url, target: "_blank", rel: "noopener noreferrer", class: "flex aspect-video items-center justify-center text-sm font-medium text-zinc-600 underline"
+      link_to url, url, target: "_blank", rel: "noopener noreferrer", class: "flex aspect-video items-center justify-center text-sm font-medium text-zinc-600 underline dark:text-zinc-400"
     end
   end
 
