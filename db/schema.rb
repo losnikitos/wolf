@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_25_101345) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_17_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -37,6 +37,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_25_101345) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "blog_posts", force: :cascade do |t|
+    t.boolean "archived", default: false, null: false
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "edited_at"
+    t.json "entities", default: [], null: false
+    t.datetime "imported_at"
+    t.json "poll"
+    t.datetime "published_at", null: false
+    t.json "reactions", default: [], null: false
+    t.string "slug"
+    t.bigint "telegram_grouped_id"
+    t.integer "telegram_message_id", null: false
+    t.json "telegram_message_ids", default: [], null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.integer "views"
+    t.index ["published_at"], name: "index_blog_posts_on_published_at"
+    t.index ["slug"], name: "index_blog_posts_on_slug", unique: true
+    t.index ["telegram_message_id"], name: "index_blog_posts_on_telegram_message_id", unique: true
   end
 
   create_table "clients", force: :cascade do |t|

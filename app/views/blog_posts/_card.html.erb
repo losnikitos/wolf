@@ -1,0 +1,27 @@
+<% post_title = post.title.presence || t("blog.untitled") %>
+<%= link_to blog_path(post),
+      class: "group block h-full rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-950/5 transition hover:border-zinc-300 hover:shadow-md hover:shadow-zinc-950/10 dark:border-zinc-800/80 dark:bg-zinc-900 dark:shadow-none dark:hover:border-zinc-700" do %>
+  <article class="flex h-full flex-col overflow-hidden rounded-2xl">
+    <%= render "shared/cover",
+          record: post,
+          title: post_title,
+          show_title: false,
+          cover_method: :cover_attachment,
+          media_class: "h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" %>
+    <div class="flex flex-1 flex-col gap-3 p-5">
+      <div class="flex flex-wrap items-center gap-2">
+        <% if post.published_at.present? %>
+          <span class="inline-flex rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+            <%= l(post.published_at, format: :long) %>
+          </span>
+        <% end %>
+      </div>
+      <h3 class="text-lg font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700 dark:text-zinc-100 dark:group-hover:text-zinc-300">
+        <%= post_title %>
+      </h3>
+      <% if post.excerpt.present? %>
+        <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400"><%= post.excerpt %></p>
+      <% end %>
+    </div>
+  </article>
+<% end %>

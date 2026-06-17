@@ -34,6 +34,10 @@
             reviews_path,
             class: nav_link_class,
             aria: { selected: request.path.start_with?("/reviews") } %>
+      <%= link_to t("nav.blog"),
+            blog_index_path,
+            class: nav_link_class,
+            aria: { selected: request.path.start_with?("/blog") } %>
       <%= link_to search_path,
             class: search_link_class,
             aria: { label: t("nav.search"), selected: current_page?(search_path) } do %>
