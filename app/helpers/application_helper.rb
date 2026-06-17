@@ -1,6 +1,7 @@
 module ApplicationHelper
   include NotionBodyHelper
   include NotionHelper
+  include TelegramBodyHelper
 
   def tw_label_classes
     "mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   resources :media, only: %i[index show], param: :slug
   resources :talks, only: %i[index show], param: :slug
   resources :reviews, only: %i[index show], param: :slug
+  resources :blog, only: %i[index show], param: :slug, controller: "blog_posts"
 
   resources :projects, only: %i[index show], param: :slug do
     collection do

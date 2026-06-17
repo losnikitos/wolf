@@ -1,0 +1,9 @@
+<% if posts.any? %>
+  <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <% posts.each do |post| %>
+      <li>
+        <%= render "card", post: post %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

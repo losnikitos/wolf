@@ -16,6 +16,7 @@ ru:
     media: В медиа
     talks: Выступления
     reviews: Отзывы
+    blog: Блог
     search: Поиск
   footer:
     copyright: "© 2023 — Евгений Волк"
@@ -85,6 +86,12 @@ ru:
     untitled: Отзыв без названия
     page_title: Отзыв
     no_reviews: Отзывов пока нет.
+  blog:
+    title: Блог
+    untitled: Запись без названия
+    page_title: Запись
+    no_posts: Записей пока нет.
+    view_on_telegram: Открыть в Telegram
   search:
     title: Поиск
     placeholder: Поиск по названию…

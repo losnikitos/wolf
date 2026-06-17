@@ -16,6 +16,7 @@ en:
     media: Media
     talks: Talks
     reviews: Reviews
+    blog: Blog
     search: Search
   footer:
     copyright: "© 2023 — Eugene Wolf"
@@ -83,6 +84,12 @@ en:
     untitled: Untitled review
     page_title: Review
     no_reviews: No reviews yet.
+  blog:
+    title: Blog
+    untitled: Untitled post
+    page_title: Post
+    no_posts: No posts yet.
+    view_on_telegram: View on Telegram
   search:
     title: Search
     placeholder: Search by name…
