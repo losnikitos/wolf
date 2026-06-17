@@ -27,6 +27,10 @@ Rails.application.configure do
     host: ENV.fetch("APP_HOST", "example.com"),
     protocol: "https"
   }
+  config.action_controller.default_url_options = {
+    host: ENV.fetch("APP_HOST", "wolf.rocketbox.plus"),
+    protocol: "https"
+  }
 
   # Kamal's kamal-proxy terminates TLS; the app sees HTTP with forwarded proto headers.
   config.assume_ssl = true

@@ -1,6 +1,8 @@
 <% post_title = @post.title.presence || t("blog.untitled") %>
 
 <% content_for :title, post_title %>
+<% content_for :description, @post.excerpt %>
+<% content_for :image, seo_cover_image_url(@post) %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">
   <%= render "shared/page_header",

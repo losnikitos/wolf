@@ -1,0 +1,21 @@
+<% page_title = content_for?(:title) ? content_for(:title) : nil %>
+<% title = seo_title(page_title) %>
+<% description = seo_description(content_for?(:description) ? content_for(:description) : t("site.meta_description")) %>
+<% canonical = content_for?(:canonical).presence || seo_canonical_url %>
+<% image = content_for?(:image).presence || seo_default_image_url %>
+
+<meta name="description" content="<%= description %>">
+<link rel="canonical" href="<%= canonical %>">
+<meta name="robots" content="<%= seo_robots_content %>">
+
+<meta property="og:title" content="<%= title %>">
+<meta property="og:description" content="<%= description %>">
+<meta property="og:url" content="<%= canonical %>">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="<%= seo_og_locale %>">
+<meta property="og:image" content="<%= image %>">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= title %>">
+<meta name="twitter:description" content="<%= description %>">
+<meta name="twitter:image" content="<%= image %>">

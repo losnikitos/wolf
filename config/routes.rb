@@ -26,6 +26,8 @@ Rails.application.routes.draw do
 
   root "home#index"
 
+  get "sitemap.xml", to: "sitemaps#show", defaults: { format: :xml }
+
   resource :locale, only: :update
 
   get "search", to: "search#index"

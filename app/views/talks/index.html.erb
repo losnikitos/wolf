@@ -1,4 +1,6 @@
 <% content_for :title, t("talks.title") %>
+<% content_for :description, t("talks.meta_description") %>
+<% content_for :image, seo_default_image_url %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-5 pb-16 pt-10 sm:px-8">
   <%= render "shared/page_header", title: t("talks.title") %>

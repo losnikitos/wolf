@@ -1,4 +1,7 @@
 <% content_for :title, @project.name.presence || t("projects.page_title") %>
+<% content_for :description, record_seo_description(@project) %>
+<% content_for :image, seo_cover_image_url(@project) %>
+<% content_for :canonical, project_url(@project) if @client %>
 <% project_title = @project.name.presence || t("projects.untitled") %>
 <% project_breadcrumbs = if @client
   [
