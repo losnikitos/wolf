@@ -1,1 +1,12 @@
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+User-agent: *
+Allow: /
+Disallow: /sign_in
+Disallow: /sign_up
+Disallow: /sessions
+Disallow: /password
+Disallow: /identity/
+Disallow: /avo/
+Disallow: /search
+Disallow: /up
+
+Sitemap: https://wolf.rocketbox.plus/sitemap.xml

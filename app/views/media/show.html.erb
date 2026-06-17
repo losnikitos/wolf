@@ -1,4 +1,6 @@
 <% content_for :title, @media_appearance.name.presence || t("media.page_title") %>
+<% content_for :description, record_seo_description(@media_appearance) %>
+<% content_for :image, seo_cover_image_url(@media_appearance) %>
 <% appearance_title = @media_appearance.name.presence || t("media.untitled") %>
 
 <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pb-16 pt-10 sm:px-8">

@@ -2,6 +2,7 @@ en:
   site:
     name: Eugene Wolf
     app_name: Wolf
+    meta_description: Creative and product director — strategy, naming, and design for MTV, STS, Za Rulem, the Moscow Marathon, and more.
   locale:
     label: Language
     switch_en: Switch to English
@@ -50,6 +51,7 @@ en:
     empty_portfolio_link: projects
   projects:
     title: Projects
+    meta_description: Case studies and portfolio work in branding, naming, strategy, and production.
     untitled: Untitled project
     page_title: Project
     count:
@@ -64,11 +66,13 @@ en:
     collection_title: "%{label}: %{tag}"
   clients:
     title: Clients
+    meta_description: Brands and organizations Eugene Wolf has worked with.
     other_group: Other
     no_clients: No clients yet.
     no_projects: No projects linked to this client yet.
   media:
     title: Media
+    meta_description: Press features and media appearances.
     nav_title: Media
     untitled: Untitled appearance
     page_title: Media appearance
@@ -76,16 +80,19 @@ en:
     read_on_publication: Read on %{publication}
   talks:
     title: Talks
+    meta_description: Talks and public speaking engagements.
     untitled: Untitled talk
     page_title: Talk
     no_talks: No talks yet.
   reviews:
     title: Reviews
+    meta_description: Client reviews and testimonials.
     untitled: Untitled review
     page_title: Review
     no_reviews: No reviews yet.
   blog:
     title: Blog
+    meta_description: Notes and updates from Eugene Wolf's Telegram channel.
     untitled: Untitled post
     page_title: Post
     no_posts: No posts yet.

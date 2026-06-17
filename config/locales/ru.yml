@@ -2,6 +2,7 @@ ru:
   site:
     name: Евгений Волк
     app_name: Wolf
+    meta_description: Креативный и продуктовый директор — стратегия, нейминг и дизайн для MTV, СТС, «За рулём», Московского марафона и других.
   locale:
     label: Язык
     switch_en: Переключить на английский
@@ -50,6 +51,7 @@ ru:
     empty_portfolio_link: проекты
   projects:
     title: Проекты
+    meta_description: Кейсы и портфолио в брендинге, нейминге, стратегии и продакшене.
     untitled: Проект без названия
     page_title: Проект
     count:
@@ -66,11 +68,13 @@ ru:
     collection_title: "%{label}: %{tag}"
   clients:
     title: Клиенты
+    meta_description: Бренды и организации, с которыми работал Евгений Волк.
     other_group: Другое
     no_clients: Клиентов пока нет.
     no_projects: К этому клиенту пока не привязано проектов.
   media:
     title: В медиа
+    meta_description: Публикации в прессе и медиа-упоминания.
     nav_title: Медиа
     untitled: Публикация без названия
     page_title: Публикация
@@ -78,16 +82,19 @@ ru:
     read_on_publication: Читать на %{publication}
   talks:
     title: Выступления
+    meta_description: Выступления и публичные лекции.
     untitled: Выступление без названия
     page_title: Выступление
     no_talks: Выступлений пока нет.
   reviews:
     title: Отзывы
+    meta_description: Отзывы и рекомендации клиентов.
     untitled: Отзыв без названия
     page_title: Отзыв
     no_reviews: Отзывов пока нет.
   blog:
     title: Блог
+    meta_description: Заметки и обновления из Telegram-канала Евгения Волка.
     untitled: Запись без названия
     page_title: Запись
     no_posts: Записей пока нет.

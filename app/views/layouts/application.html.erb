@@ -10,7 +10,8 @@
         }
       })()
     </script>
-    <title><%= content_for(:title) || t("site.app_name") %></title>
+    <title><%= seo_title(content_for?(:title) ? content_for(:title) : nil) %></title>
+    <%= render "shared/seo" %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="<%= t("site.app_name") %>">
