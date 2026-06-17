@@ -5,31 +5,31 @@
     <div class="mb-6 size-24 overflow-hidden rounded-full sm:mb-8 sm:size-32">
       <%= image_tag "profile.jpg", alt: "", class: "size-full object-cover" %>
     </div>
-    <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">
+    <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl dark:text-zinc-100">
       <%= t("site.name") %>
     </h1>
-    <p class="mt-2 text-4xl font-normal tracking-tight text-zinc-400 sm:text-5xl lg:text-6xl">
+    <p class="mt-2 text-4xl font-normal tracking-tight text-zinc-400 sm:text-5xl lg:text-6xl dark:text-zinc-500">
       <%= t("home.tagline") %>
     </p>
-    <p class="mt-2 text-base text-zinc-600">
-      <%= t("home.bio_html", link: link_to(t("home.bio_telegram_link"), "https://t.me/intrigator", class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900", target: "_blank", rel: "noopener noreferrer")).html_safe %>
+    <p class="mt-2 text-base text-zinc-600 dark:text-zinc-400">
+      <%= t("home.bio_html", link: link_to(t("home.bio_telegram_link"), "https://t.me/intrigator", class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100", target: "_blank", rel: "noopener noreferrer")).html_safe %>
     </p>
   </section>
 
   <% if @favorite_projects.any? %>
     <section class="mt-20 sm:mt-28" aria-label="<%= t("home.selected_projects") %>">
       <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <h2 class="text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
+        <h2 class="text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-100">
           <%= t("home.selected_projects") %>
         </h2>
         <%= link_to t("home.all_projects"),
               projects_path,
-              class: "font-medium text-zinc-600 underline decoration-zinc-300 underline-offset-4 transition hover:text-zinc-900 hover:decoration-zinc-900" %>
+              class: "font-medium text-zinc-600 underline decoration-zinc-300 underline-offset-4 transition hover:text-zinc-900 hover:decoration-zinc-900 dark:text-zinc-400 dark:decoration-zinc-600 dark:hover:text-zinc-100 dark:hover:decoration-zinc-100" %>
       </div>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <% @favorite_projects.each_with_index do |project, i| %>
-          <%= link_to project_path(project), class: ["group block overflow-hidden rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 lg:col-span-2"] do %>
-            <div class="relative aspect-[4/5] overflow-hidden bg-zinc-100 h-full sm:aspect-[3/4] lg:aspect-[16/10]">
+          <%= link_to project_path(project), class: ["group block overflow-hidden rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950 lg:col-span-2"] do %>
+            <div class="relative aspect-[4/5] overflow-hidden bg-zinc-100 h-full sm:aspect-[3/4] lg:aspect-[16/10] dark:bg-zinc-800">
               <%= render "shared/cover",
                     record: project,
                     show_title: false,
@@ -55,11 +55,11 @@
   <% end %>
 
   <section class="mt-24 max-w-2xl sm:mt-32">
-    <p class="text-base leading-relaxed text-zinc-600 sm:text-lg">
+    <p class="text-base leading-relaxed text-zinc-600 sm:text-lg dark:text-zinc-400">
       <% if @favorite_projects.any? %>
-        <%= t("home.more_work_html", link: link_to(t("home.more_work_link"), projects_path, class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900")).html_safe %>
+        <%= t("home.more_work_html", link: link_to(t("home.more_work_link"), projects_path, class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100")).html_safe %>
       <% else %>
-        <%= t("home.empty_portfolio_html", link: link_to(t("home.empty_portfolio_link"), projects_path, class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900")).html_safe %>
+        <%= t("home.empty_portfolio_html", link: link_to(t("home.empty_portfolio_link"), projects_path, class: "font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100")).html_safe %>
       <% end %>
     </p>
   </section>

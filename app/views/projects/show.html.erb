@@ -32,13 +32,13 @@ end %>
     <div class="flex flex-wrap items-start justify-between gap-4">
       <div class="flex flex-wrap items-center gap-2">
         <% if @project.year.present? %>
-          <span class="inline-flex rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600"><%= @project.year %></span>
+          <span class="inline-flex rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"><%= @project.year %></span>
         <% end %>
         <% if @project.status.present? %>
           <span class="inline-flex rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800"><%= @project.status %></span>
         <% end %>
         <% if @project.archived? %>
-          <span class="inline-flex rounded-md bg-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-700"><%= t("shared.archived") %></span>
+          <span class="inline-flex rounded-md bg-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200"><%= t("shared.archived") %></span>
         <% end %>
         <% if @project.favorite? %>
           <span class="inline-flex items-center gap-1 rounded-md bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-900">
@@ -63,7 +63,7 @@ end %>
 
     <% meta_bits = [@project.client&.name, @project.city, @project.project_type].compact %>
     <% if meta_bits.any? %>
-      <p class="text-base text-zinc-600"><%= meta_bits.join(" · ") %></p>
+      <p class="text-base text-zinc-600 dark:text-zinc-400"><%= meta_bits.join(" · ") %></p>
     <% end %>
 
     <%= render "projects/body" %>

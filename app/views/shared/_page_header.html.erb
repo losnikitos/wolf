@@ -4,20 +4,20 @@
     <nav class="text-sm" aria-label="<%= t("shared.breadcrumb") %>">
       <% breadcrumbs.each_with_index do |crumb, index| %>
         <% if index.positive? %>
-          <span class="mx-2 text-zinc-300" aria-hidden="true">/</span>
+          <span class="mx-2 text-zinc-300 dark:text-zinc-600" aria-hidden="true">/</span>
         <% end %>
         <% if crumb[:current] %>
-          <span class="text-zinc-900" aria-current="page"><%= crumb[:label] %></span>
+          <span class="text-zinc-900 dark:text-zinc-100" aria-current="page"><%= crumb[:label] %></span>
         <% elsif crumb[:path].present? %>
-          <%= link_to crumb[:label], crumb[:path], class: "font-medium text-zinc-500 transition hover:text-zinc-800" %>
+          <%= link_to crumb[:label], crumb[:path], class: "font-medium text-zinc-500 transition hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200" %>
         <% else %>
-          <span class="text-zinc-500"><%= crumb[:label] %></span>
+          <span class="text-zinc-500 dark:text-zinc-400"><%= crumb[:label] %></span>
         <% end %>
       <% end %>
     </nav>
   <% end %>
 
-  <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">
+  <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl dark:text-zinc-100">
     <%= title %>
   </h1>
 </header>

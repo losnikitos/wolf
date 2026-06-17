@@ -6,6 +6,10 @@ en:
     label: Language
     switch_en: Switch to English
     switch_ru: Switch to Russian
+  theme:
+    label: Theme
+    light: Light theme
+    dark: Dark theme
   nav:
     clients: Clients
     projects: Projects

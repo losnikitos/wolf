@@ -3,34 +3,34 @@
     <p class="<%= tw_alert_success_classes %>"><%= notice %></p>
   <% end %>
 
-  <h1 class="text-center text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl">Devices &amp; sessions</h1>
-  <p class="mt-2 text-center text-sm text-zinc-600">Signed-in devices for your account.</p>
+  <h1 class="text-center text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl dark:text-zinc-100">Devices &amp; sessions</h1>
+  <p class="mt-2 text-center text-sm text-zinc-600 dark:text-zinc-400">Signed-in devices for your account.</p>
 
   <div id="sessions" class="mt-8 space-y-6">
     <% @sessions.each do |session| %>
-      <div id="<%= dom_id session %>" class="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
-        <dl class="space-y-2 text-sm text-zinc-700">
+      <div id="<%= dom_id session %>" class="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 dark:border-zinc-800 dark:bg-zinc-900/50">
+        <dl class="space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
           <div>
-            <dt class="font-medium text-zinc-900">User agent</dt>
-            <dd class="mt-0.5 break-all text-zinc-600"><%= session.user_agent %></dd>
+            <dt class="font-medium text-zinc-900 dark:text-zinc-100">User agent</dt>
+            <dd class="mt-0.5 break-all text-zinc-600 dark:text-zinc-400"><%= session.user_agent %></dd>
           </div>
           <div>
-            <dt class="font-medium text-zinc-900">IP address</dt>
-            <dd class="mt-0.5 text-zinc-600"><%= session.ip_address %></dd>
+            <dt class="font-medium text-zinc-900 dark:text-zinc-100">IP address</dt>
+            <dd class="mt-0.5 text-zinc-600 dark:text-zinc-400"><%= session.ip_address %></dd>
           </div>
           <div>
-            <dt class="font-medium text-zinc-900">Created</dt>
-            <dd class="mt-0.5 text-zinc-600"><%= session.created_at %></dd>
+            <dt class="font-medium text-zinc-900 dark:text-zinc-100">Created</dt>
+            <dd class="mt-0.5 text-zinc-600 dark:text-zinc-400"><%= session.created_at %></dd>
           </div>
         </dl>
-        <div class="mt-4 border-t border-zinc-200 pt-4">
-          <%= button_to "Log out this session", session, method: :delete, class: "inline-flex cursor-pointer items-center justify-center rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" %>
+        <div class="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+          <%= button_to "Log out this session", session, method: :delete, class: "inline-flex cursor-pointer items-center justify-center rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:border-red-800 dark:bg-zinc-900 dark:text-red-400 dark:hover:bg-red-950/50" %>
         </div>
       </div>
     <% end %>
   </div>
 
-  <div class="mt-8 border-t border-zinc-200 pt-6 text-center">
+  <div class="mt-8 border-t border-zinc-200 pt-6 text-center dark:border-zinc-800">
     <%= link_to "Back to home", root_path, class: tw_text_link_classes %>
   </div>
 <% end %>

@@ -7,16 +7,16 @@
     <div class="columns-1 gap-x-10 sm:columns-2 md:columns-4 lg:gap-x-14">
       <% @group_names.each do |group_name| %>
         <section class="mb-10 break-inside-avoid">
-          <h2 class="mb-3 text-2xl/6 font-bold tracking-tight text-zinc-900"><%= group_name %></h2>
+          <h2 class="mb-3 text-2xl/6 font-bold tracking-tight text-zinc-900 dark:text-zinc-100"><%= group_name %></h2>
           <ul class="flex flex-col gap-2">
             <% @clients_by_group[group_name].each do |client| %>
               <% project_count = @project_counts[client.id].to_i %>
               <li>
                 <%= link_to client_path(client),
-                      class: "flex min-w-0 items-baseline gap-2 font-medium transition text-zinc-700 hover:text-zinc-900" do %>
+                      class: "flex min-w-0 items-baseline gap-2 font-medium transition text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100" do %>
                   <span class="min-w-0 truncate"><%= client.name %></span>
                   <% if project_count.positive? %>
-                    <span class="shrink-0 tabular-nums font-normal text-zinc-400"><%= project_count %></span>
+                    <span class="shrink-0 tabular-nums font-normal text-zinc-400 dark:text-zinc-500"><%= project_count %></span>
                   <% end %>
                 <% end %>
               </li>
@@ -26,9 +26,9 @@
       <% end %>
     </div>
   <% else %>
-    <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center">
-      <p class="text-zinc-600"><%= t("clients.no_clients") %></p>
-      <p class="mt-2 text-sm text-zinc-500"><%= t("shared.run_notion_sync") %></p>
+    <div class="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 px-6 py-16 text-center dark:border-zinc-800 dark:bg-zinc-900/50">
+      <p class="text-zinc-600 dark:text-zinc-400"><%= t("clients.no_clients") %></p>
+      <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400"><%= t("shared.run_notion_sync") %></p>
     </div>
   <% end %>
 </div>

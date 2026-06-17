@@ -1,7 +1,7 @@
 <%# locals: (record:, aspect_class: "aspect-[16/10]", media_class: "h-full w-full object-cover", title: nil, show_title: true, size: :thumb, cover_method: :cover_for_display) %>
 <% cover_attachment = record.public_send(cover_method) %>
 <% if cover_attachment %>
-  <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
+  <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden dark:bg-zinc-800">
     <% if cover_attachment.image? %>
       <%= image_tag display_image(cover_attachment, size: size), alt: "", class: media_class %>
     <% elsif cover_attachment.video? %>
@@ -15,11 +15,11 @@
     <% end %>
   </div>
 <% elsif record.respond_to?(:cover_url) && record.cover_url.present? %>
-  <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden">
+  <div class="<%= aspect_class %> bg-zinc-100 overflow-hidden dark:bg-zinc-800">
     <%= image_tag record.cover_url, alt: "", class: media_class %>
   </div>
 <% elsif show_title && (display_title = title.presence || record.name.presence) %>
   <div class="px-5 pt-5 pb-1">
-    <h2 class="text-xl font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700 sm:text-2xl"><%= display_title %></h2>
+    <h2 class="text-xl font-semibold leading-snug text-zinc-900 group-hover:text-zinc-700 sm:text-2xl dark:text-zinc-100 dark:group-hover:text-zinc-300"><%= display_title %></h2>
   </div>
 <% end %>
