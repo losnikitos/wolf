@@ -10,3 +10,21 @@
     display: none;
   }
 }
+
+.gaze__face {
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.gaze[data-gaze="center"] .gaze__face[data-gaze-face="center"],
+.gaze[data-gaze="up"] .gaze__face[data-gaze-face="up"],
+.gaze[data-gaze="up-right"] .gaze__face[data-gaze-face="up-right"],
+.gaze[data-gaze="right"] .gaze__face[data-gaze-face="right"],
+.gaze[data-gaze="down-right"] .gaze__face[data-gaze-face="down-right"],
+.gaze[data-gaze="down"] .gaze__face[data-gaze-face="down"],
+.gaze[data-gaze="down-left"] .gaze__face[data-gaze-face="down-left"],
+.gaze[data-gaze="left"] .gaze__face[data-gaze-face="left"],
+.gaze[data-gaze="up-left"] .gaze__face[data-gaze-face="up-left"] {
+  opacity: 1;
+}
