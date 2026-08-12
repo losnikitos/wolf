@@ -4,15 +4,17 @@
 
 <div class="mx-auto w-full max-w-6xl px-5 pb-20 pt-16 sm:px-8 sm:pt-24">
   <section class="max-w-4xl">
-    <div
-      class="gaze mb-6 size-24 sm:mb-8 sm:size-32"
+    <button
+      type="button"
+      class="gaze mb-6 size-24 cursor-pointer border-0 bg-transparent p-0 sm:mb-8 sm:size-32"
       data-controller="gaze"
+      data-action="click->gaze#smile"
       data-gaze-center-radius-value="48"
       data-gaze="center"
-      aria-hidden="true"
+      aria-label="<%= t("site.name") %>"
     >
       <div class="relative size-full overflow-hidden rounded-full" data-gaze-target="frame">
-        <% %w[center up up-right right down-right down down-left left up-left].each do |direction| %>
+        <% %w[center smile up up-right right down-right down down-left left up-left].each do |direction| %>
           <%= image_tag "wolf-#{direction}.jpg",
                 alt: "",
                 class: "gaze__face absolute inset-0 size-full object-cover",
@@ -20,7 +22,7 @@
                 draggable: false %>
         <% end %>
       </div>
-    </div>
+    </button>
     <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl dark:text-zinc-100">
       <%= t("site.name") %>
     </h1>

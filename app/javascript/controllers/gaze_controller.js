@@ -12,6 +12,8 @@ const DIRECTIONS = [
   "up-right",
 ]
 
+const SMILE_MS = 1200
+
 export default class extends Controller {
   static targets = ["frame"]
   static values = {
@@ -20,6 +22,7 @@ export default class extends Controller {
 
   connect() {
     this.current = "center"
+    this.smiling = false
     this.boundMove = (event) => this.#onMove(event)
     this.boundLeave = () => this.#onLeave()
     window.addEventListener("pointermove", this.boundMove, { passive: true })
@@ -28,16 +31,30 @@ export default class extends Controller {
   }
 
   disconnect() {
+    clearTimeout(this.smileTimeout)
     window.removeEventListener("pointermove", this.boundMove)
     window.removeEventListener("pointerleave", this.boundLeave)
     document.removeEventListener("mouseleave", this.boundLeave)
   }
 
+  smile() {
+    clearTimeout(this.smileTimeout)
+    this.smiling = true
+    this.#setDirection("smile")
+    this.smileTimeout = setTimeout(() => {
+      this.smiling = false
+      this.#setDirection("center")
+    }, SMILE_MS)
+  }
+
   #onLeave() {
+    if (this.smiling) return
     this.#setDirection("center")
   }
 
   #onMove(event) {
+    if (this.smiling) return
+
     const rect = this.frameTarget.getBoundingClientRect()
     const cx = rect.left + rect.width / 2
     const cy = rect.top + rect.height / 2

@@ -18,6 +18,7 @@
 }
 
 .gaze[data-gaze="center"] .gaze__face[data-gaze-face="center"],
+.gaze[data-gaze="smile"] .gaze__face[data-gaze-face="smile"],
 .gaze[data-gaze="up"] .gaze__face[data-gaze-face="up"],
 .gaze[data-gaze="up-right"] .gaze__face[data-gaze-face="up-right"],
 .gaze[data-gaze="right"] .gaze__face[data-gaze-face="right"],
